@@ -9119,3 +9119,6 @@ a.button {
   border-top-width: 1px;
   border-bottom-width: 0;
   width: 100%; }
+
+.popupReportProblem .popup {
+  width: 50% !important; }

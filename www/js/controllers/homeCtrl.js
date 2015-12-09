@@ -5,7 +5,9 @@
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
-    $scope.myUser.name = "pseudo"
+    $scope.myUser.name = "pseudo";
+    $scope.vehicule = {};
+    $scope.vehicule.etat = false;
 
     // ======== VARIABLES INTERNES ===============================
     var options = {timeout: 10000, enableHighAccuracy: true};

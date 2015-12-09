@@ -6,6 +6,18 @@
         </div>
     </ion-header-bar>
     <ion-content>
+        <div class="etat">
+            <div style="float:right;">
+                <div class="etat-text" ng-if="vehicule.etat">En route</div>
+                <div class="etat-text" ng-if="!vehicule.etat">En pause</div>
+                <label class="toggle etat-toggle">
+                    <input type="checkbox" ng-model="vehicule.etat" ng-checked="vehicule.etat">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </label>
+            </div>
+        </div>
         <div id="map" data-tap-disabled="true"></div>
     </ion-content>
     <div class="footer">

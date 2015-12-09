@@ -1,0 +1,24 @@
+<ion-view cache-view="false">
+    <ion-header-bar align-title="center" class="bar">
+        <a ng-click="goToHome()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        <h1 class="title">{{vehicule.problems.length}} problème(s) en cours</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="problems" ng-show="vehicule.problems.length <= 0">
+            <div class="bar bar-energized">
+                <div class="title">Aucun problème en cours !</div>
+            </div>
+        </div>
+        <ion-item class="row" ng-repeat="problem in vehicule.problems" item="problem">
+            <label class="col col-60 txt-problems">
+                <span>{{ problem}}</span>
+            </label>
+            <button class="col col-20 button button-icon bt-cancel-problems" ng-click="closeProblem(problem)">
+                <i class="icon ion-android-cancel assertive"></i>
+            </button>
+        </ion-item>
+    </ion-content>
+</ion-view>

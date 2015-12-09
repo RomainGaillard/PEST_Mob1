@@ -8,6 +8,7 @@
     $scope.myUser.name = "pseudo";
     $scope.vehicule = {};
     $scope.vehicule.etat = false;
+    $scope.vehicule.problems = [];
 
     // ======== VARIABLES INTERNES ===============================
     var options = {timeout: 10000, enableHighAccuracy: true};
@@ -44,22 +45,24 @@
         console.log("Could not get location");
     });
 
-
     // ========= LES ROUTES ======================================
 
-    $scope.goToHome = function () {
-        $state.go("home");
+    $scope.goToProblems = function(){
+        $state.go("problems",{vehicule:$scope.vehicule},{reload:true});
     }
-
     // ========= LES FONCTIONS DU SCOPE ============================
 
     // ========= LES FONCTIONS INTERNES ============================
+
+    var sendProblem = function(reason) {
+        $scope.vehicule.problems.push(reason);
+        //$('.problems').show();
+    }
 
     // ========= LES POPUPS ========================================
 
     $scope.reportProblem = function() {
         $scope.data = {}
-
         // An elaborate, custom popup
         var myPopup = $ionicPopup.show({
             template: '<textarea ng-model="data.reason" rows="3" ></textarea>',
@@ -73,22 +76,16 @@
                     text: '<b>Envoyer</b>',
                     type: 'button-assertive',
                     onTap: function(e) {
-                        if (!$scope.data.wifi) {
+                        if ($scope.data.reason == undefined || $scope.data.reason == "") {
                             //don't allow the user to close unless he enters wifi password
                             e.preventDefault();
                         } else {
-                            return $scope.data.wifi;
+                            sendProblem($scope.data.reason);
                         }
                     }
                 }
             ]
         });
-        myPopup.then(function(res) {
-            console.log('Tapped!', res);
-        });
-        $timeout(function() {
-            myPopup.close(); //close the popup after 3 seconds for some reason
-        }, 3000);
     };
 
     // ========= LES EVENEMENTS ====================================

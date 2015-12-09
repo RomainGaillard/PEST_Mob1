@@ -6,8 +6,13 @@
         </div>
     </ion-header-bar>
     <ion-content>
+        <div class="problems pointer" ng-hide="vehicule.problems.length <= 0" ng-click="goToProblems()">
+            <div class="bar bar-energized">
+                <div class="title">{{vehicule.problems.length}} problème(s) en cours...</div>
+            </div>
+        </div>
         <div class="etat">
-            <div style="float:right;">
+            <div class="etat-content">
                 <div class="etat-text" ng-if="vehicule.etat">En route</div>
                 <div class="etat-text" ng-if="!vehicule.etat">En pause</div>
                 <label class="toggle etat-toggle">

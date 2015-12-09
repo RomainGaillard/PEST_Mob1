@@ -60,3 +60,28 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .popupReportProblem .popup{
   width:50% !important;
 }
+
+.etat{
+  position:absolute;top:0px;right:5px;margin-right:10px;z-index:999;margin-top:30px;width:145px;
+  background-color:rgba(255,255,255,0.9);border-radius:5px;padding:5px;color:black;font-size:17px;
+}
+
+.etat-text{
+  float:left;
+  line-height:35px;
+  margin-right:10px;
+}
+
+.etat-toggle .track{
+  background-color:$assertive;
+  border:solid 2px #BD2318;
+}
+
+// Bt +/- de la google MAP
+.gmnoprint{
+  margin-bottom:60px !important;
+}
+
+.pointer{
+  cursor:pointer !important;
+}

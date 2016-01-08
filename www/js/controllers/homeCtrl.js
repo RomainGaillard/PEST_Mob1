@@ -49,7 +49,7 @@
 
     $scope.goToProblems = function(){
         $state.go("problems",{vehicule:$scope.vehicule},{reload:true});
-    }
+    };
     // ========= LES FONCTIONS DU SCOPE ============================
 
     // ========= LES FONCTIONS INTERNES ============================
@@ -57,12 +57,12 @@
     var sendProblem = function(reason) {
         $scope.vehicule.problems.push(reason);
         //$('.problems').show();
-    }
+    };
 
     // ========= LES POPUPS ========================================
 
     $scope.reportProblem = function() {
-        $scope.data = {}
+        $scope.data = {};
         // An elaborate, custom popup
         var myPopup = $ionicPopup.show({
             template: '<textarea ng-model="data.reason" rows="3" ></textarea>',
@@ -90,4 +90,4 @@
 
     // ========= LES EVENEMENTS ====================================
 
-}])
+}]);

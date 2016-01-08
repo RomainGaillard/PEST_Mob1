@@ -57,18 +57,23 @@
   ];
 
   function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup) {
+
+    // ======== LES VARIABLES DU SCOPE ==========================
+    $scope.myUser = {};
+    
     if ($auth.isAuthenticated()){
-      $state.go('app.home');
+      $state.go('home');
     }
-    $scope.onLoginClick = function (loginFormData) {
-      if (!loginFormData){
+    $scope.onLoginClick = function () {
+
+      if (!$scope.myUser){
         popUp('Veuillez saisir vos identifiants.');
         return false;
       }
-      $auth.login({email: angular.lowercase(myUser.identifier), password: myUser.password})
+      $auth.login({email: angular.lowercase($scope.myUser.identifier), password:  $scope.myUser.password})
         .then(function (response) {
           $rootScope.authenticationRequired = true;
-          $state.go('app.home');
+          $state.go('home');
         })
         .catch(function (error) {
           popUp('Nom de compte ou mot de passe invalide.');

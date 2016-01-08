@@ -3,8 +3,8 @@
  */
 (function(){
   angular
-    .module('app')
+    .module('starter')
     .constant('SETTINGS', {
-      BASE_API_URL: 'http://localhost:8100/api'
+      BASE_API_URL: 'http://localhost:1337/'
     })
 })();

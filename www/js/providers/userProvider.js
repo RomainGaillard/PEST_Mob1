@@ -7,11 +7,11 @@
 (function(){
   'use strict';
   angular
-    .module('app')
+    .module('provider', [])
     .factory('UserProvider', UserProvider);
 
-  OrganizationProvider.$inject = [
-    'Restangular',
+  UserProvider.$inject = [
+    'restangular',
     'SETTINGS'
   ];
 

@@ -1,4 +1,4 @@
-﻿angular.module('login.controllers',[])
+﻿/*angular.module('login.controllers',[])
 
 
 .controller('LoginCtrl', ['$scope', '$state','$rootScope', function ($scope, $state,$rootScope) {
@@ -34,5 +34,57 @@
     // ========= LES POPUPS ========================================
 
     // ========= LES EVENEMENTS ====================================
-    
-}])
+
+}])*/
+
+/**
+ * Created by damienp on 06/11/15.
+ */
+(function(){
+  'use strict';
+
+  angular
+    .module('login.controllers',['satellizer'])
+    .controller('LoginController', LoginController);
+
+  LoginController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$state',
+    '$auth',
+    '$ionicPopup'
+  ];
+
+  function LoginController($rootScope, $scope, $state, $auth, $ionicPopup) {
+    if ($auth.isAuthenticated()){
+      $state.go('app.home');
+    }
+    $scope.onLoginClick = function (loginFormData) {
+      if (!loginFormData){
+        popUp('Veuillez saisir vos identifiants.');
+        return false;
+      }
+      $auth.login({email: angular.lowercase(myUser.identifier), password: myUser.password})
+        .then(function (response) {
+          $rootScope.authenticationRequired = true;
+          $state.go('app.home');
+        })
+        .catch(function (error) {
+          popUp('Nom de compte ou mot de passe invalide.');
+        })
+      ;
+    };
+
+    function popUp(subTitle) {
+      var errorPop = $ionicPopup.show({
+        template: '<p>',
+        title: 'Connexion impossible',
+        subTitle: subTitle,
+        scope: $scope,
+        buttons: [{ text: 'Ok' }]
+      });
+    }
+  }
+
+})();
+

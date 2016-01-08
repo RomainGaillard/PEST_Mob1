@@ -53,15 +53,16 @@
     '$scope',
     '$state',
     '$auth',
-    '$ionicPopup'
+    '$ionicPopup',
+    '$ionicHistory'
   ];
 
-  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup) {
+  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
     
-    if ($auth.isAuthenticated()){
+    if ($auth.isAuthenticated() && $ionicHistory.currentStateName() == "app" ){
       $state.go('home');
     }
     $scope.onLoginClick = function () {

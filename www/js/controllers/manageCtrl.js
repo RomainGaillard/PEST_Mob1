@@ -2,21 +2,43 @@
  * Created by Romain Gaillard on 08/01/2016.
  */
 
-angular.module('manage.controllers',[])
+angular.module('manage.controllers',['ngTable'])
 
 
-    .controller('ManageCtrl', ['$scope', '$state','UserProvider', function ($scope, $state,UserProvider) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider','NgTableParams','$filter', function ($scope, $state,UserProvider,NgTableParams,$filter) {
 
         // ======== LES VARIABLES DU SCOPE ==========================
-        $scope.users = UserProvider.getAll()
-            .then(function(res){
-                return res;
-            })
-            .catch(function(err){
-                console.log(err);
-            });
+
+        $scope.newUser = {};
+
+        // ========= LES FONCTIONS INTERNES ============================
+
+        var getAllUsers = function(){
+            UserProvider.getAll()
+                .then(function(res){
+                    var users = res;
+                    console.log(res);
+
+                    var data = users;
+                    $scope.tableParamsUser = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
 
         // ======== INITIALISATION ===================================
+
+        getAllUsers();
 
         // ======== VARIABLES INTERNES ===============================
 
@@ -47,7 +69,25 @@ angular.module('manage.controllers',[])
 
         // ========= LES FONCTIONS DU SCOPE ============================
 
-        // ========= LES FONCTIONS INTERNES ============================
+        $scope.removeUser = function(id){
+            UserProvider.remove(id).then(function(res) {
+                getAllUsers();
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+        }
+
+
+        $scope.createUser = function(){
+            UserProvider.create($scope.newUser).then(function(res){
+                getAllUsers();
+            })
+            .catch(function(err){
+                console.log(err);
+            })
+        }
+
 
         // ========= LES POPUPS ========================================
 

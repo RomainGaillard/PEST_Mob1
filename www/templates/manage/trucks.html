@@ -1,0 +1,19 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <div class="buttons">
+            <a ng-click="goToBack()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
+        <h1 class="title">Administration: Véhicules</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+
+        <tables>
+            <tr ng-repeat="truck in trucks">
+                <td>#{{truck.id}}</td>
+            </tr>
+        </tables>
+    </ion-content>
+</ion-view>

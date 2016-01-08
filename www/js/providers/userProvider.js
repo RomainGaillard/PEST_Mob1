@@ -4,7 +4,7 @@
 /**
  * Created by Caup Dorian on 13/11/2015.
  */
-(function(){
+/*(function(){
   'use strict';
   angular
     .module('provider', [])
@@ -14,8 +14,11 @@
     'restangular',
     'SETTINGS'
   ];
+*/
 
-  function UserProvider(Restangular, SETTINGS) {
+angular.module('provider',['restangular'])
+
+    .factory('UserProvider',['SETTINGS','Restangular', function UserProvider(SETTINGS,Restangular) {
     var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
     return {
       'create': create,
@@ -44,5 +47,5 @@
     function getOne(){
       return provider.one('user', idUser).get();
     }
-  }
-})();
+  }]);
+//})();

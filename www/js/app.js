@@ -77,7 +77,7 @@ angular.module('starter',
             templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl",
             data: {
-                'authenticationRequired' : false
+                'authenticationRequired' : true
             }
         })
 
@@ -88,7 +88,35 @@ angular.module('starter',
             data: {
               'authenticationRequired' : true
             }
+        })
+
+        .state("manageTrucks",{
+            url:"/manage_trucks",
+            templateUrl:'templates/manage/trucks.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("manageCompanys",{
+            url:"/manage_companys",
+            templateUrl:'templates/manage/companys.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("managePannes",{
+            url:"/manage_pannes",
+            templateUrl:'templates/manage/pannes.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
         });
+
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/#');

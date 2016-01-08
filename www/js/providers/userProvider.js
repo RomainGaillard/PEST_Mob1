@@ -11,7 +11,7 @@
     .factory('UserProvider', UserProvider);
 
   UserProvider.$inject = [
-    'restangular',
+    'Restangular',
     'SETTINGS'
   ];
 

@@ -18,22 +18,22 @@ angular.module('manage.controllers',[])
 
         var goToManageUsers = function () {
             $state.go("manageUsers");
-        }
+        };
         var goToManageTrucks = function () {
             $state.go("manageTrucks");
-        }
+        };
         var goToManagePannes = function () {
             $state.go("managePannes");
-        }
+        };
         var goToManageTypesPanne = function () {
             $state.go("manageTypesPanne");
-        }
+        };
         var goToManageRepairmans = function () {
             $state.go("manageRepairmans");
-        }
+        };
         var goToManageCompanys = function () {
             $state.go("manageCompanys");
-        }
+        };
 
         // ========= LES FONCTIONS DU SCOPE ============================
 
@@ -43,4 +43,4 @@ angular.module('manage.controllers',[])
 
         // ========= LES EVENEMENTS ====================================
 
-    }])
+    }]);

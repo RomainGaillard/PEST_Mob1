@@ -11,12 +11,12 @@ module.exports = {
 
   schema: true,
   attributes: {
-    //company: {
-    //  model:'company',
-    //  required:true,
-    //  columnName: 'id_company'
-    //},
-/*    truck: {
+    company: {
+      model:'company',
+      required:true,
+      columnName: 'id_company'
+    },
+    truck: {
       model:'truck',
       columnName: 'id_truck',
     },
@@ -24,7 +24,7 @@ module.exports = {
     repairman: {
       model:'repairman',
       columnName:'id_repairman'
-    },*/
+    },
     firstname: {
       type: 'string',
       required: 'true',

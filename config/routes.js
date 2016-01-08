@@ -36,7 +36,17 @@ module.exports.routes = {
     view: 'homepage'
   },
 
+  /***************************************************************************
+   * Les routes de l'authent
+   ***************************************************************************/
+
   'post /auth/local': 'AuthController.index',
+  /***************************************************************************
+   * Les routes du model PANNE
+  ***************************************************************************/
+  'post /panne':"PanneController.create",
+  'put /panne':"PanneController.update",
+  'get /panne/:id_truck':"PanneController.getMyPannes"
 
   /***************************************************************************
   *                                                                          *

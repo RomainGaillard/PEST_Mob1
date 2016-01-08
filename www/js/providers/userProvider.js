@@ -16,7 +16,7 @@
   ];
 */
 
-angular.module('provider',['restangular'])
+angular.module('provider')
 
     .factory('UserProvider',['SETTINGS','Restangular', function UserProvider(SETTINGS,Restangular) {
     var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);

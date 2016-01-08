@@ -5,21 +5,20 @@
 angular.module('manage.controllers',['ngTable'])
 
 
-    .controller('ManageCtrl', ['$scope', '$state','UserProvider','NgTableParams','$filter', function ($scope, $state,UserProvider,NgTableParams,$filter) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','NgTableParams','$ionicHistory', function ($scope, $state,UserProvider,TruckProvider,NgTableParams,$ionicHistory) {
 
         // ======== LES VARIABLES DU SCOPE ==========================
 
         $scope.newUser = {};
+        $scope.newTruck = {};
 
         // ========= LES FONCTIONS INTERNES ============================
 
         var getAllUsers = function(){
             UserProvider.getAll()
                 .then(function(res){
-                    var users = res;
                     console.log(res);
-
-                    var data = users;
+                    var data = res;
                     $scope.tableParamsUser = new NgTableParams({
                         page: 1,
                         count: 10,
@@ -29,16 +28,42 @@ angular.module('manage.controllers',['ngTable'])
                             $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                         }
                     });
-
                 })
                 .catch(function(err){
                     console.log(err);
                 });
         }
 
-        // ======== INITIALISATION ===================================
+        var getAllTrucks = function(){
+            TruckProvider.getAll()
+                .then(function(res){
+                    console.log(res);
+                    var data = res;
+                    $scope.tableParamsTruck = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
 
-        getAllUsers();
+
+        // ======== INITIALISATION ===================================
+        switch($ionicHistory.currentStateName()) {
+            case "manageUsers":
+                getAllUsers();
+                break;
+            case "manageTrucks":
+                getAllTrucks();
+                break;
+        }
 
         // ======== VARIABLES INTERNES ===============================
 
@@ -62,7 +87,6 @@ angular.module('manage.controllers',['ngTable'])
         $scope.goToManageCompanys = function () {
             $state.go("manageCompanys");
         }
-
         $scope.goToBack = function(){
             $state.go("manageMenu");
         }
@@ -71,23 +95,40 @@ angular.module('manage.controllers',['ngTable'])
 
         $scope.removeUser = function(id){
             UserProvider.remove(id).then(function(res) {
-                getAllUsers();
-            })
-            .catch(function(err){
-                console.log(err);
-            });
+                    getAllUsers();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
-
 
         $scope.createUser = function(){
             UserProvider.create($scope.newUser).then(function(res){
-                getAllUsers();
-            })
-            .catch(function(err){
-                console.log(err);
-            })
+                    getAllUsers();
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
         }
 
+        $scope.removeTruck = function(id){
+            TruckProvider.remove(id).then(function(res) {
+                    getAllTrucks()
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        $scope.createTruck = function(){
+            console.log($scope.newTruck.running)
+            TruckProvider.create($scope.newTruck).then(function(res){
+                    getAllTrucks()
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
 
         // ========= LES POPUPS ========================================
 

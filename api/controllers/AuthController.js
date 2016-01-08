@@ -18,12 +18,12 @@ module.exports = {
             return res.json(401, {err: 'email and password required'});
         }
 
-        Users.findOne({email: email}, function (err, user) {
+        User.findOne({email: email}, function (err, user) {
             if (!user) {
                 return res.json(401, {err: 'invalid email or password'});
             }
 
-            Users.comparePassword(password, user, function (err, valid) {
+            User.comparePassword(password, user, function (err, valid) {
                 if (err) {
                     return res.json(403, {err: 'forbidden'});
                 }

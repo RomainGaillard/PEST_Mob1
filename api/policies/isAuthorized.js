@@ -35,6 +35,11 @@ module.exports = function (req, res, next) {
     jwToken.verify(token, function (err, token) {
         if (err) return res.json(401, {err: 'Invalid Token!'});
         req.token = token; // This is the decrypted token or the payload you provided
+        User.findOne({id:req.token.id}).exec(function(err,user){
+            if(err) return res.serverError
+            req.user = user
+            console.log(req)
+        })
         next();
     });
 };

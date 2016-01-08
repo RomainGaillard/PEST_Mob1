@@ -34,7 +34,9 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+
+  'post /auth/local': 'AuthController.index',
 
   /***************************************************************************
   *                                                                          *

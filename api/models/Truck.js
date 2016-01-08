@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    name:{
+      type:'string',
+      defaultsTo:'unamed'
+    },
     running:{
       type:'boolean',
       defaultsTo:'false'

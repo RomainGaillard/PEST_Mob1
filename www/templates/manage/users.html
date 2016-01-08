@@ -1,0 +1,19 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <h1 class="title">Administration: Utilisateurs</h1>
+    </ion-header-bar>
+    <ion-content>
+
+        <tables>
+            <tr ng-repeat="user in users">
+                <td>#{{user.lastname}}</td>
+            </tr>
+        </tables>
+        <button class="button button-positive center-block" ng-click="goToManageUsers()">Utilisateurs</button>
+        <button class="button button-positive center-block" ng-click="goToManageTrucks()">Véhicules</button>
+        <button class="button button-positive center-block" ng-click="goToManagePannes()">Pannes</button>
+        <button class="button button-positive center-block" ng-click="goToManageTypesPanne()">Types de panne</button>
+        <button class="button button-positive center-block" ng-click="goToManageRepairmans()">Réparateurs</button>
+        <button class="button button-positive center-block" ng-click="goToManageCompanys()()">Company</button>
+    </ion-content>
+</ion-view>

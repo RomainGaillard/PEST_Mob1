@@ -20,6 +20,16 @@ module.exports = {
     },
     comment:{
       type:'string'
+    },
+    truck:{
+      model:'Truck',
+      columnName:'truck_id',
+      required:true
+    },
+    typePanne:{
+      model:'Type_panne',
+      columnName:'type_panne_id',
+      required:true
     }
   }
 };

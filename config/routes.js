@@ -34,7 +34,14 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+
+  /***************************************************************************
+   * Les routes du model PANNE
+  ***************************************************************************/
+  'post /panne':"PanneController.create",
+  'put /panne':"PanneController.update",
+  'get /panne/:id_truck':"PanneController.getMyPannes"
 
   /***************************************************************************
   *                                                                          *

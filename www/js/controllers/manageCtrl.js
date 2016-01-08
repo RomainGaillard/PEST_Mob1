@@ -16,23 +16,27 @@ angular.module('manage.controllers',[])
 
         // ========= LES ROUTES ======================================
 
-        var goToManageUsers = function () {
+        $scope.goToManageUsers = function () {
             $state.go("manageUsers");
         }
-        var goToManageTrucks = function () {
+        $scope.goToManageTrucks = function () {
             $state.go("manageTrucks");
         }
-        var goToManagePannes = function () {
+        $scope.goToManagePannes = function () {
             $state.go("managePannes");
         }
-        var goToManageTypesPanne = function () {
+        $scope.goToManageTypesPanne = function () {
             $state.go("manageTypesPanne");
         }
-        var goToManageRepairmans = function () {
+        $scope.goToManageRepairmans = function () {
             $state.go("manageRepairmans");
         }
-        var goToManageCompanys = function () {
+        $scope.goToManageCompanys = function () {
             $state.go("manageCompanys");
+        }
+
+        $scope.goToBack = function(){
+            $state.go("manageMenu");
         }
 
         // ========= LES FONCTIONS DU SCOPE ============================

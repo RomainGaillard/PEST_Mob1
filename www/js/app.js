@@ -3,10 +3,19 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','login.controllers','home.controllers','problems.controllers','manage.controllers',
-                'users.services'])
 
-.run(function($ionicPlatform) {
+angular.module('starter',
+  ['ionic',
+    'login.controllers',
+    'home.controllers',
+    'problems.controllers',
+    'manage.controllers',
+    'users.services',
+    'provider',
+    'satellizer',
+    'ui.router'])
+
+.run(function($ionicPlatform, $rootScope, $auth) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -21,6 +30,13 @@ angular.module('starter', ['ionic','login.controllers','home.controllers','probl
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      var authenticationRequired = next.data.authenticationRequired;
+      if (authenticationRequired && !$auth.isAuthenticated()) {
+        $state.go('app');
+      }
+    });
   });
 })
 
@@ -31,19 +47,28 @@ angular.module('starter', ['ionic','login.controllers','home.controllers','probl
             url: '',
             cache: false,
             templateUrl: 'templates/login.html',
-            controller: 'LoginCtrl'
+            controller: 'LoginController',
+            data: {
+              'authenticationRequired' : false
+            }
         })
 
         .state('home', {
             url: '/home',
             templateUrl: 'templates/home.html',
-            controller:'HomeCtrl'
+            controller:'HomeCtrl',
+            data: {
+              'authenticationRequired' : true
+            }
         })
 
         .state('problems',{
             url:'/problems',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
+            data: {
+              'authenticationRequired' : true
+            },
             params: {'vehicule':{etat:false,problems:[]}}
         })
 
@@ -51,13 +76,17 @@ angular.module('starter', ['ionic','login.controllers','home.controllers','probl
             url: '/manage_menu',
             templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl"
+
         })
 
         .state("manageUsers",{
             url:"/manage_users",
             templateUrl:'templates/manage/users.html',
-            controller:"ManageCtrl"
-        })
+            controller:"ManageCtrl",
+            data: {
+              'authenticationRequired' : true
+            }
+        });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/#');

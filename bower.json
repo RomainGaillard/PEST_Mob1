@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "jquery-ui": "~1.11.4",
-    "ngCordova": "~0.1.23-alpha"
+    "ngCordova": "~0.1.23-alpha",
+    "satellizer": "~0.13.0",
+    "restangular": "~1.5.1"
   }
 }

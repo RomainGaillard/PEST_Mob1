@@ -46,7 +46,7 @@ angular.module('starter',
             url: '',
             cache: false,
             templateUrl: 'templates/login.html',
-            controller: 'LoginController',
+            controller: 'LoginCtrl',
             data: {
               'authenticationRequired' : false
             }

@@ -45,9 +45,9 @@
 
   angular
     .module('login.controllers',['satellizer'])
-    .controller('LoginController', LoginController);
+    .controller('LoginCtrl', LoginCtrl);
 
-  LoginController.$inject = [
+  LoginCtrl.$inject = [
     '$rootScope',
     '$scope',
     '$state',
@@ -55,12 +55,12 @@
     '$ionicPopup'
   ];
 
-  function LoginController($rootScope, $scope, $state, $auth, $ionicPopup) {
+  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup) {
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
 
     if ($auth.isAuthenticated()){
-      $state.go('app.home');
+      $state.go('home');
     }
     $scope.onLoginClick = function () {
 
@@ -71,7 +71,7 @@
       $auth.login({email: angular.lowercase($scope.myUser.identifier), password:  $scope.myUser.password})
         .then(function (response) {
           $rootScope.authenticationRequired = true;
-          $state.go('app.home');
+          $state.go('home');
         })
         .catch(function (error) {
           popUp('Nom de compte ou mot de passe invalide.');

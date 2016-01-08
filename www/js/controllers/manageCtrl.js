@@ -5,10 +5,16 @@
 angular.module('manage.controllers',[])
 
 
-    .controller('ManageCtrl', ['$scope', '$state','$rootScope', function ($scope, $state,$rootScope) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider', function ($scope, $state,UserProvider) {
 
         // ======== LES VARIABLES DU SCOPE ==========================
-        $scope.users = {};
+        $scope.users = UserProvider.getAll()
+            .then(function(res){
+                return res;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
 
         // ======== INITIALISATION ===================================
 

@@ -15,7 +15,7 @@ angular.module('starter',
     'satellizer',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth) {
+.run(function($ionicPlatform, $rootScope, $auth,$state) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -47,7 +47,7 @@ angular.module('starter',
             url: '',
             cache: false,
             templateUrl: 'templates/login.html',
-            controller: 'LoginController',
+            controller: 'LoginCtrl',
             data: {
               'authenticationRequired' : false
             }
@@ -75,8 +75,10 @@ angular.module('starter',
         .state('manageMenu', {
             url: '/manage_menu',
             templateUrl: 'templates/manage_menu.html',
-            controller: "ManageCtrl"
-
+            controller: "ManageCtrl",
+            data: {
+                'authenticationRequired' : false
+            }
         })
 
         .state("manageUsers",{

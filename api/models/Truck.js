@@ -18,8 +18,7 @@ module.exports = {
       defaultsTo:'Ok'
     },
     location:{
-      type:'boolean',
-      defaultsTo:'false'
+      type:'string'
     },
     company:{
       model:'Company',

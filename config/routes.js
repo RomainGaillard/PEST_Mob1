@@ -48,6 +48,12 @@ module.exports.routes = {
   'put /panne':"PanneController.update",
   'get /panne/:id_truck':"PanneController.getMyPannes"
 
+/**  GET /boat -> BoatController.find                                        *
+  *  GET /boat/:id -> BoatController.findOne                                 *
+  *  POST /boat -> BoatController.create                                     *
+  *  PUT /boat/:id -> BoatController.update                                  *
+  *  DELETE /boat/:id -> BoatController.destroy                              */
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

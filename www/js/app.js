@@ -34,10 +34,10 @@ angular.module('starter',
     }
 
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      var authenticationRequired = next.data.authenticationRequired;
-      if (authenticationRequired && !$auth.isAuthenticated()) {
-        $state.go('app');
-      }
+        var authenticationRequired = next.data.authenticationRequired;
+        if (authenticationRequired && !$auth.isAuthenticated()) {
+            $state.go('app');
+        }
     });
   });
 })

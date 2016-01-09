@@ -8,16 +8,20 @@ angular.module('manage.controllers',['ngTable'])
     .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','NgTableParams','$ionicHistory', function ($scope, $state,UserProvider,TruckProvider,NgTableParams,$ionicHistory) {
 
         // ======== LES VARIABLES DU SCOPE ==========================
-
         $scope.newUser = {};
         $scope.newTruck = {};
+
 
         // ========= LES FONCTIONS INTERNES ============================
 
         var getAllUsers = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
             UserProvider.getAll()
                 .then(function(res){
                     console.log(res);
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
                     var data = res;
                     $scope.tableParamsUser = new NgTableParams({
                         page: 1,
@@ -35,9 +39,14 @@ angular.module('manage.controllers',['ngTable'])
         }
 
         var getAllTrucks = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
             TruckProvider.getAll()
                 .then(function(res){
                     console.log(res);
+                    $scope.chargement = false;
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
                     var data = res;
                     $scope.tableParamsTruck = new NgTableParams({
                         page: 1,

@@ -117,6 +117,24 @@ angular.module('starter',
             data: {
                 'authenticationRequired' : true
             }
+        })
+
+        .state("manageTypesPanne",{
+            url:"/manage_typesPanne",
+            templateUrl:'templates/manage/type_panne.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("manageRepairmans",{
+            url:"/manage_repairmans",
+            templateUrl:'templates/manage/repairmans.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
         });
 
 

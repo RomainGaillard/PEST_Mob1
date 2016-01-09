@@ -5,12 +5,19 @@
 angular.module('manage.controllers',['ngTable'])
 
 
-    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','NgTableParams','$ionicHistory', function ($scope, $state,UserProvider,TruckProvider,NgTableParams,$ionicHistory) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','RepairmanProvider','NgTableParams','$ionicHistory',
+        function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,RepairmanProvider,NgTableParams,$ionicHistory) {
+
 
         // ======== LES VARIABLES DU SCOPE ==========================
         $scope.newUser = {};
         $scope.newTruck = {};
+        $scope.newPanne = {};
+        $scope.newCompany = {};
+        $scope.newTypePanne = {};
+        $scope.newRepairman = {};
 
+        $scope.typesPanne = {};
 
         // ========= LES FONCTIONS INTERNES ============================
 
@@ -44,7 +51,6 @@ angular.module('manage.controllers',['ngTable'])
             TruckProvider.getAll()
                 .then(function(res){
                     console.log(res);
-                    $scope.chargement = false;
                     $(".chargement").slideUp("slow");
                     $(".table-responsive").slideDown("slow");
                     var data = res;
@@ -63,6 +69,105 @@ angular.module('manage.controllers',['ngTable'])
                 });
         }
 
+        var getAllPannes = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
+            PanneProvider.getAll()
+                .then(function(res){
+                    console.log(res);
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
+                    var data = res;
+                    $scope.tableParamsPanne = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        var getAllCompanys = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
+            CompanyProvider.getAll()
+                .then(function(res){
+                    console.log(res);
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
+                    var data = res;
+                    $scope.tableParamsCompany = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        var getAllTypesPanne = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
+            TypePanneProvider.getAll()
+                .then(function(res){
+                    console.log(res);
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
+                    var data = res;
+                    $scope.tableParamsTypePanne = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                    $scope.typesPanne = res;
+                    if($ionicHistory.currentStateName()=="managePannes")
+                        $scope.newPanne.typePanne = $scope.typesPanne[0];
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        var getAllRepairmans = function(){
+            $(".table-responsive").hide();
+            $(".chargement").show();
+            RepairmanProvider.getAll()
+                .then(function(res){
+                    console.log(res);
+                    $scope.chargement = false;
+                    $(".chargement").slideUp("slow");
+                    $(".table-responsive").slideDown("slow");
+                    var data = res;
+                    $scope.tableParamsRepairman = new NgTableParams({
+                        page: 1,
+                        count: 10,
+                    },{
+                        total:data.length,
+                        getData: function ($defer, params) {
+                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
 
         // ======== INITIALISATION ===================================
         switch($ionicHistory.currentStateName()) {
@@ -71,6 +176,19 @@ angular.module('manage.controllers',['ngTable'])
                 break;
             case "manageTrucks":
                 getAllTrucks();
+                break;
+            case "managePannes":
+                getAllTypesPanne();
+                getAllPannes();
+                break;
+            case "manageCompanys":
+                getAllCompanys();
+                break;
+            case "manageTypesPanne":
+                getAllTypesPanne();
+                break;
+            case "manageRepairmans":
+                getAllRepairmans();
                 break;
         }
 
@@ -139,8 +257,83 @@ angular.module('manage.controllers',['ngTable'])
                 })
         }
 
+        $scope.removePanne = function(id){
+            PanneProvider.remove(id).then(function(res) {
+                    getAllPannes();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        $scope.createPanne = function(){
+            console.log($scope.newPanne.typePanne)
+            PanneProvider.create($scope.newPanne).then(function(res){
+                    getAllPannes();
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
+
+        $scope.removeCompany = function(id){
+            CompanyProvider.remove(id).then(function(res) {
+                    getAllCompanys();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        $scope.createCompany = function(){
+            console.log($scope.newCompany.type);
+            CompanyProvider.create($scope.newCompany).then(function(res){
+                    getAllCompanys();
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
+
+        $scope.removeTypePanne = function(id){
+            TypePanneProvider.remove(id).then(function(res) {
+                    getAllTypesPanne();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        $scope.createTypePanne = function(){
+            TypePanneProvider.create($scope.newTypePanne).then(function(res){
+                    getAllTypesPanne();
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
+
+        $scope.removeRepairman = function(id){
+            RepairmanProvider.remove(id).then(function(res) {
+                    getAllRepairmans();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        $scope.createRepairman = function(){
+            RepairmanProvider.create($scope.newRepairman).then(function(res){
+                    getAllRepairmans();
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
+
         // ========= LES POPUPS ========================================
 
         // ========= LES EVENEMENTS ====================================
+
 
     }])

@@ -31,8 +31,8 @@ angular.module('provider')
             return provider.one('truck').getList();
         }
 
-        function getOne(){
-            return provider.one('truck', idUser).get();
+        function getOne(idTruck){
+            return provider.one('truck', idTruck).get();
         }
     }]);
 //})();

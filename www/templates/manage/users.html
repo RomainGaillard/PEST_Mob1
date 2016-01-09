@@ -30,6 +30,9 @@
                     <td data-title="'N°Tel'">
                         {{user.phoneNumber}}
                     </td>
+                    <td data-title="'Compagnie'">
+                        {{user.company.name}}
+                    </td>
                     <td data-title="'Supprimer'">
                         <button class="button button-small button-icon" ng-click="removeUser({{user.id}})">
                             <i class="icon ion-ios-trash assertive"></i>
@@ -66,9 +69,9 @@
                         </label>
                         <label class="item item-input">
                             <label>Rang:  <br></label>
-                            <select class="form-control" style="width:15%" ng-model="newUser.right">
-                                <option value="User" disabled>Utilisateur</option>
-                                <option value="Admin" disabled>Administrateur</option>
+                            <select ng-model="newUser.right" ng-init="newUser.right = 'User'" class="form-control" style="width:15%" >
+                                <option value="User">Utilisateur</option>
+                                <option value="Admin">Administrateur</option>
 
                                 <option value="0" disabled>Transporteur</option>
                                 <option value="1" disabled>Réparateur</option>
@@ -77,7 +80,7 @@
                             </select>
                         </label>
                     </div>
-                    <button id="btConnexion" class="button button-full button-balanced" type="submit">
+                    <button id="" class="button button-full button-balanced" type="submit">
                         <div id="successCo">
                             <i class="ion-android-arrow-dropright-circle"></i>
                             <span>   Ajouter</span>

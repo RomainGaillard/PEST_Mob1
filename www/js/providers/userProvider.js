@@ -44,7 +44,7 @@ angular.module('provider')
       return provider.one('user').getList();
     }
 
-    function getOne(){
+    function getOne(idUser){
       return provider.one('user', idUser).get();
     }
   }]);

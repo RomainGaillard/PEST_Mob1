@@ -57,9 +57,9 @@
                         </label>
                         <label class="item item-input">
                             <label>Etat:  <br></label>
-                            <select class="form-control" style="width:15%" ng-model="newTruck.state">
-                                <option value="Ok" disabled>Ok</option>
-                                <option value="En Panne" disabled>En Panne</option>
+                            <select class="form-control" style="width:15%" ng-model="newTruck.state" ng-init="newTruck.state = 'Ok'">
+                                <option value="Ok">Ok</option>
+                                <option value="En Panne">En Panne</option>
                             </select>
                         </label>
                         <div class="item item-input">
@@ -73,7 +73,7 @@
                             </label>
                         </div>
                     </div>
-                    <button id="btConnexion" class="button button-full button-balanced" type="submit">
+                    <button id="" class="button button-full button-balanced" type="submit">
                         <div id="successCo">
                             <i class="ion-android-arrow-dropright-circle"></i>
                             <span>   Ajouter</span>

@@ -12,7 +12,8 @@ module.exports = {
 
             if(truck){
                 if(truck.currentUser && !ToolsUtils.isEmpty(truck.currentUser)){
-                    User.findOne({id:truck.currentUser}.exec(function(err,user){
+                    User.update(truck.currentUser, {truck:truck.id}).exec(function(err,user){});
+/*                    User.findOne({id:truck.currentUser}.exec(function(err,user){
                         if(err) return res.serverError({error: "impossible de retrouver le user pour faire l'association"});
 
                         if(user){
@@ -24,7 +25,7 @@ module.exports = {
                                 return res.json(201, {truck: truck});
                             })
                         }else return res.notFound({error: "user non existant pour l'association"})
-                    }))
+                    }))*/
                 }
 
                 return res.json(201, {truck: truck})
@@ -62,6 +63,8 @@ module.exports = {
             })
         }else return res.status(403).json({error: "must be administrator"})
     },
+
+    // todo relation one to one si on change l'id du currentUser il faut que l'ancien user et le nouveau le sache
 
     update:function(req,res){
         var name = req.param("name");

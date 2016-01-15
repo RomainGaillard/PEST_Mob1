@@ -20,25 +20,27 @@ module.exports = {
             // If user created successfuly we return user and token as response
             if (user) {
                 // NOTE: payload is { id: user.id}
-
-                Truck.findOne({id:user.truck}).exec(function(err,truck){
+                Truck.update(user.truck, {currentUser:user.id}).exec(function (req,truck) {})
+                
+/*                Truck.findOne({id:user.truck}).exec(function(err,truck){
                     if(err) return res.serverError({error: "impossible de retrouver le truck pour faire l'association"});
 
                     if(truck){
-                        truck.currentUser = user.id
+
+                        /!*truck.currentUser = user.id
 
                         truck.save(function(err){
                             if(err) return res.serverError({error: "impossible de faire l'association avec le truck"});
 
                             return res.json(201, {user:user})
-                        })
+                        })*!/
                     }else return res.notFound({error:"le truck à cet id n'existe pas"})
-                })
+                })*/
                 res.json(200, {user: user, token: jwToken.issue({id: user.id})});
             }else return res.json(500, {error: "impossible de créer le camion"})
         });
     }
 
-    // todo relation one to one si on change l'id du truck il faut que l'ancien user et le nouveau le sache
+    // todo relation one to one si on change l'id du truck il faut que l'ancien truck et le nouveau le sache
 };
 

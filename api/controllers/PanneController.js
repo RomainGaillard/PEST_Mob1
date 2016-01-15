@@ -27,7 +27,7 @@ module.exports = {
         })
     },*/
 
-    // todo relation one to one si on change l'id du truck il faut que l'ancien truck et le nouveau le sache
+
     update:function(req,res){
         var comment = req.param("comment");
         var priority = req.param("priority");

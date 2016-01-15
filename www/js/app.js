@@ -18,27 +18,50 @@ angular.module('starter',
     'ui.router'])
 
 .run(function($ionicPlatform, $rootScope, $auth,$state) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    $ionicPlatform.ready(function() {
+        if(window.cordova && window.cordova.plugins.Keyboard) {
+            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+            // for form inputs)
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-
-    $rootScope.$on('$stateChangeStart', function (event, next) {
-        var authenticationRequired = next.data.authenticationRequired;
-        if (authenticationRequired && !$auth.isAuthenticated()) {
-            $state.go('app');
+            // Don't remove this line unless you know what you are doing. It stops the viewport
+            // from snapping when text inputs are focused. Ionic handles this internally for
+            // a much nicer keyboard experience.
+            cordova.plugins.Keyboard.disableScroll(true);
         }
-    });
+        if(window.StatusBar) {
+            StatusBar.styleDefault();
+        }
+
+        $rootScope.$on('$stateChangeStart', function (event, next) {
+            var authenticationRequired = next.data.authenticationRequired;
+            clearInterval();
+            console.log("stateChangeStart");
+            if (authenticationRequired && !$auth.isAuthenticated()) {
+                $state.go('app');
+            }
+            else if($auth.isAuthenticated()){
+                setInterval(updateLocation, 1000);
+            }
+        });
+
+        if($auth.isAuthenticated()){
+            setInterval(updateLocation, 1000);
+        }
+
+        function updateLocation() {
+            console.log("envoi location");
+            io.socket.put("http://localhost:1337/truck/:id/update",{token:"",location:""},function(truck,jwres){
+                if(jwres.statusCode == 201){
+                    console.log(truck);
+                }
+                else{
+                    console.log('Erreur'+jwres.body.err);
+                }
+            })
+        }
+
+
   });
 })
 

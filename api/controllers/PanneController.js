@@ -10,7 +10,7 @@ var panneModel = require('../models/Panne.js');
 
 module.exports = {
 
-    create: function(req,res){
+    /*create: function(req,res){
         //panneModel.comment = req.param('comment');
         Panne.create().exec(function(err,panne){
             if(panne){
@@ -23,7 +23,7 @@ module.exports = {
             sails.log.debug("=> Creation PANNE: Erreur");
             return res.status(400).json({err:"create Panne: Erreur. "+err})
         })
-    },
+    },*/
     update:function(req,res){
         Panne.findOne({id:req.param("idPanne")}).exec(function(err,panne) {
             if (panne) {

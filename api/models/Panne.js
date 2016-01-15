@@ -23,13 +23,13 @@ module.exports = {
     },
     truck:{
       model:'Truck',
-      columnName:'truck_id',
-      required:true
+      columnName:'id_truck',
+      required:'true'
     },
     typePanne:{
       model:'Type_panne',
-      columnName:'type_panne_id',
-      required:true
+      columnName:'id_type_panne',
+      required:'true'
     }
   }
 };

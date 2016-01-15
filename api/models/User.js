@@ -13,7 +13,6 @@ module.exports = {
   attributes: {
     company: {
       model:'company',
-      required:true,
       columnName: 'id_company'
     },
     truck: {

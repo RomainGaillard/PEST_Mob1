@@ -44,7 +44,7 @@ module.exports.routes = {
   /***************************************************************************
    * Les routes du model PANNE
   ***************************************************************************/
-  'post /panne':"PanneController.create",
+  //'post /panne':"PanneController.create",
   'put /panne':"PanneController.update",
   'get /panne/:id_truck':"PanneController.getMyPannes"
 

@@ -8,6 +8,10 @@
 module.exports = {
 
   attributes: {
+    name:{
+      type:'string',
+      defaultsTo:'unamed'
+    },
     running:{
       type:'boolean',
       defaultsTo:'false'
@@ -18,12 +22,11 @@ module.exports = {
       defaultsTo:'Ok'
     },
     location:{
-      type:'boolean',
-      defaultsTo:'false'
+      type:'string'
     },
     company:{
       model:'Company',
-      required:true,
+      required:'true',
       columnName: 'company_id'
     },
     currentUser:{

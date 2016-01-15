@@ -60,6 +60,21 @@
 
   function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory, Storage) {
 
+    // ======== LES FONCTIONS INTERNES ==========================
+    function goToHome(){
+      console.log(Storage.getStorage("user").data.user.right);
+      switch(Storage.getStorage("user").data.user.right){
+        case "Utilisateur": $state.go("home");
+              break;
+        case "Administrateur":
+              console.log("oooook")
+              $state.go("manageMenu");
+              break;
+        default:
+              $state.go("home");
+              break;
+      }
+    }
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
 
@@ -76,7 +91,7 @@
         .then(function (response) {
           $rootScope.authenticationRequired = true;
           Storage.setStorage('user', response);
-          $state.go('home');
+          goToHome();
         })
         .catch(function (error) {
           popUp('Connexion impossible','Nom de compte ou mot de passe invalide.');

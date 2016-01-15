@@ -1,0 +1,19 @@
+<label>Commentaire : </label>
+<textarea ng-model="newPanne.comment" rows="3" ></textarea>
+</br>
+<div>
+  <div style="float: left; margin-right: 20px;">
+    <label>Priorité: <br></label>
+    <select ng-model="newPanne.priority" ng-init="newPanne.priority = 'Faible'" class="form-control">
+      <option value="Faible">Faible</option>
+      <option value="Moyenne">Moyenne</option>
+      <option value="Forte">Forte</option>
+      </select>
+  </div>
+  <div style="float: left;">
+    <label>Type de Panne: <br></label>
+    <select ng-model="newPanne.typePanne" ng-init="newPanne.typePanne = listTypePanne[0].name" class="form-control">
+      <option ng-repeat="typePanne in listTypePanne">{{typePanne.name}}</option>
+    </select>'
+  </div>
+</div>

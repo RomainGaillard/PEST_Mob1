@@ -26,7 +26,7 @@ module.exports = {
     },
     company:{
       model:'Company',
-      required:true,
+      required:'true',
       columnName: 'company_id'
     },
     currentUser:{

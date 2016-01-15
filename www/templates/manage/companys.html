@@ -1,0 +1,74 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <div class="buttons">
+            <a ng-click="goToBack()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
+        <h1 class="title">Administration: Compagnies</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="chargement">
+            <img src="../../img/ajax-loader.gif" alt="Chargement"/>
+        </div>
+        <div class="table-responsive">
+            <table ng-table="tableParamsCompany" class="table table-striped table-bordered" style="text-align:center">
+                <tr ng-repeat="company in $data">
+                    <td data-title="'Id'">
+                        #{{company.id}}
+                    </td>
+                    <td data-title="'Nom'">
+                        {{company.name}}
+                    </td>
+                    <td data-title="'Adresse'">
+                        {{company.address}}
+                    </td>
+                    <td data-title="'N°Tel'">
+                        {{company.phoneNumber}}
+                    </td>
+                    <td data-title="'Type'">
+                        {{company.type}}
+                    </td>
+                    <td data-title="'Supprimer'">
+                        <button class="button button-small button-icon" ng-click="removeCompany({{company.id}})">
+                            <i class="icon ion-ios-trash assertive"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="container">
+            <div class="jumbotron">
+                <h3>Ajouter une compagnie:</h3>
+                <form ng-submit="createCompany()">
+                    <div class="list">
+                        <label class="item item-input">
+                            <input type="text" placeholder="Nom" ng-model="newCompany.name" required>
+                        </label>
+                        <label class="item item-input">
+                            <input type="text" placeholder="Adresse" ng-model="newCompany.address">
+                        </label>
+                        <label class="item item-input">
+                            <input type="text" placeholder="N° téléphone" ng-model="newCompany.phoneNumber">
+                        </label>
+                        <label class="item item-input">
+                            <label>Type:  <br></label>
+                            <select ng-model="newCompany.type" ng-init="newCompany.type = 'transporteur'" class="form-control" style="width:15%" required>
+                                <option value="transporteur">transporteur</option>
+                                <option value="depanneur">depanneur</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button id="" class="button button-full button-balanced" type="submit">
+                        <div id="successCo">
+                            <i class="ion-android-arrow-dropright-circle"></i>
+                            <span>   Ajouter</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+

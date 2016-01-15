@@ -53,15 +53,16 @@
     '$scope',
     '$state',
     '$auth',
-    '$ionicPopup'
+    '$ionicPopup',
+    '$ionicHistory'
   ];
 
-  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup) {
+  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
-    
-    if ($auth.isAuthenticated()){
+
+    if ($auth.isAuthenticated() && $ionicHistory.currentStateName() == "app" ){
       $state.go('home');
     }
     $scope.onLoginClick = function () {
@@ -76,15 +77,27 @@
           $state.go('home');
         })
         .catch(function (error) {
-          popUp('Nom de compte ou mot de passe invalide.');
+          popUp('Connexion impossible','Nom de compte ou mot de passe invalide.');
         })
       ;
     };
 
-    function popUp(subTitle) {
+    $scope.onLogOutClick = function(){
+      $rootScope.authenticationRequired = false;
+      $auth.logout()
+        .then(function(){
+          //Storage.clearStorage();
+          $state.go('app');
+        })
+        .catch(function(response){
+          popUp('Deconnexion Impossible', 'Un problème est survenu lors de la déconnexion')
+        });
+    };
+
+    function popUp(title, subTitle) {
       var errorPop = $ionicPopup.show({
         template: '<p>',
-        title: 'Connexion impossible',
+        title: title,
         subTitle: subTitle,
         scope: $scope,
         buttons: [{ text: 'Ok' }]

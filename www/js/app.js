@@ -4,6 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 
+angular.module('provider',['restangular'])
+
 angular.module('starter',
   ['ionic',
     'login.controllers',
@@ -15,28 +17,22 @@ angular.module('starter',
     'satellizer',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth,$state) {
+.run(function($ionicPlatform, $rootScope, $auth, $http, $state) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
+      //cordova.plugins.Keyboard.disableScroll(true);
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+  });
 
-    $rootScope.$on('$stateChangeStart', function (event, next) {
-      var authenticationRequired = next.data.authenticationRequired;
-      if (authenticationRequired && !$auth.isAuthenticated()) {
-        $state.go('app');
-      }
-    });
+  $rootScope.$on('$stateChangeStart', function (event, next) {
+    var authenticationRequired = next.data.authenticationRequired;
+    if (authenticationRequired && !$auth.isAuthenticated()) {
+      event.preventDefault();
+    }
   });
 })
 
@@ -67,9 +63,9 @@ angular.module('starter',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
             data: {
-              'authenticationRequired' : true
-            },
-            params: {'vehicule':{etat:false,problems:[]}}
+              'authenticationRequired' : true,
+              'vehicule':{etat:false,problems:[]}
+            }
         })
 
         .state('manageMenu', {
@@ -77,7 +73,7 @@ angular.module('starter',
             templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl",
             data: {
-                'authenticationRequired' : false
+                'authenticationRequired' : true
             }
         })
 
@@ -88,7 +84,53 @@ angular.module('starter',
             data: {
               'authenticationRequired' : true
             }
+        })
+
+        .state("manageTrucks",{
+            url:"/manage_trucks",
+            templateUrl:'templates/manage/trucks.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("manageCompanys",{
+            url:"/manage_companys",
+            templateUrl:'templates/manage/companys.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("managePannes",{
+            url:"/manage_pannes",
+            templateUrl:'templates/manage/pannes.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("manageTypesPanne",{
+            url:"/manage_typesPanne",
+            templateUrl:'templates/manage/type_panne.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("manageRepairmans",{
+            url:"/manage_repairmans",
+            templateUrl:'templates/manage/repairmans.html',
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
         });
+
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/#');

@@ -2,18 +2,18 @@
     <ion-header-bar align-title="center" class="bar">
         <h1 class="title">Administration: Menu</h1>
         <div class="buttons">
-            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
         </div>
     </ion-header-bar>
     <ion-content>
         <br>
         <div style="text-align:center;">
-            <button class="button button-positive" ng-click="goToManageUsers()">Utilisateurs</button>
-            <button class="button button-positive" ng-click="goToManageTrucks()">Véhicules</button>
-            <button class="button button-positive" ng-click="goToManagePannes()">Pannes</button>
-            <button class="button button-positive" ng-click="goToManageTypesPanne()">Types de panne</button>
-            <button class="button button-positive" ng-click="goToManageRepairmans()">Réparateurs</button>
-            <button class="button button-positive" ng-click="goToManageCompanys()()">Company</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageUsers()">Utilisateurs</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageTrucks()">Véhicules</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManagePannes()">Pannes</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageTypesPanne()">Types de panne</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageRepairmans()">Réparateurs</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageCompanys()()">Compagnies</button>
         </div>
     </ion-content>
 </ion-view>

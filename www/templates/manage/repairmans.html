@@ -1,0 +1,67 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <div class="buttons">
+            <a ng-click="goToBack()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
+        <h1 class="title">Administration: Réparateurs</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="chargement">
+            <img src="../../img/ajax-loader.gif" alt="Chargement"/>
+        </div>
+        <div class="table-responsive">
+            <table ng-table="tableParamsRepairman" class="table table-striped table-bordered" style="text-align:center">
+                <tr ng-repeat="repairman in $data">
+                    <td data-title="'Id'">
+                        #{{repairman.id}}
+                    </td>
+                    <td data-title="'Nom'">
+                        {{repairman.user.firstname}} {{repairman.user.lastname}}
+                    </td>
+                    <td data-title="'Etat'">
+                        {{repairman.state}}
+                    </td>
+                    <td data-title="'Panne'">
+                        {{repairman.currentPanne.id}}
+                    </td>
+                    <td data-title="'Supprimer'">
+                        <button class="button button-small button-icon" ng-click="removeRepairman({{repairman.id}})">
+                            <i class="icon ion-ios-trash assertive"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="container">
+            <div class="jumbotron">
+                <h3>Ajouter un réparateur:</h3>
+                <form ng-submit="createRepairman()">
+                    <div class="list">
+                        <label class="item item-input">
+                            <input type="number" min=0 placeholder="User Id" ng-model="newRepairman.user" required>
+                        </label>
+                        <label class="item item-input">
+                            <label>Etat:  <br></label>
+                            <select ng-model="newRepairman.state" ng-init="newRepairman.state = 'Libre'" class="form-control" style="width:15%">
+                                <option value="Libre">Libre</option>
+                                <option value="Occupé">Occupé</option>
+                            </select>
+                        </label>
+                        <label class="item item-input">
+                            <input type="number" min=0 placeholder="Panne Id" ng-model="newRepairman.currentPanne">
+                        </label>
+                    </div>
+                    <button id="" class="button button-full button-balanced" type="submit">
+                        <div id="successCo">
+                            <i class="ion-android-arrow-dropright-circle"></i>
+                            <span>   Ajouter</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

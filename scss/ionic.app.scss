@@ -100,3 +100,25 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   line-height: 40px;
   margin-left:10px;
 }
+
+thead{
+  background-color:$positive;
+  font-size:15px;
+  color:white;
+  font-family:Verdana;
+}
+
+.ng-table-pager{
+  margin-left:50px;
+  margin-right:50px;
+}
+
+.size-30{
+  width:30% !important;
+  margin:auto;
+}
+
+.chargement{
+  text-align:center;
+  margin:10px;
+}

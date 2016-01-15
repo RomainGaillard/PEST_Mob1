@@ -8,6 +8,8 @@
     "jquery-ui": "~1.11.4",
     "ngCordova": "~0.1.23-alpha",
     "satellizer": "~0.13.0",
-    "restangular": "~1.5.1"
+    "restangular": "~1.5.1",
+    "bootstrap": "~3.3.6",
+    "ng-table": "~0.8.3"
   }
 }

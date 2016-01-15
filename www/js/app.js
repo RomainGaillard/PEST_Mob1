@@ -19,24 +19,52 @@ angular.module('starter',
     'LocalStorageModule',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      //cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-    //$auth.setStorageType('sessionStorage');
-  });
+.run(function($ionicPlatform, $rootScope, $auth,Storage) {
+    $ionicPlatform.ready(function() {
+        if(window.cordova && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            //cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if(window.StatusBar) {
+            StatusBar.styleDefault();
+        }
+        //$auth.setStorageType('sessionStorage');
+    });
 
-  $rootScope.$on('$stateChangeStart', function (event, next) {
-    var authenticationRequired = next.data.authenticationRequired;
-    if (authenticationRequired && !$auth.isAuthenticated()) {
-      event.preventDefault();
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+        var authenticationRequired = next.data.authenticationRequired;
+        if (authenticationRequired && !$auth.isAuthenticated()) {
+            event.preventDefault();
+        }
+        else if($auth.isAuthenticated() && Storage.getStorage("user").data.user.right == "Transporteur"){
+            $rootScope.$emit("startInterval");
+        }
+    });
+
+    if($auth.isAuthenticated()&& Storage.getStorage("user").data.user.right == "Transporteur"){
+        $rootScope.$emit("startInterval");
     }
-  });
+
+    var myInterval;
+    $rootScope.$on("stopInterval",function(event,data){
+        clearInterval(myInterval);
+    });
+
+    $rootScope.$on("startInterval",function(event,data){
+        myInterval = setInterval(updateLocation,30000);
+    });
+
+    function updateLocation() {
+        console.log("envoi location");
+        io.socket.put("http://localhost:1337/truck/:id/update",{token:"",id:"",location:""},function(truck,jwres){
+            if(jwres.statusCode == 201){
+                console.log(truck);
+            }
+            else{
+                console.log('Erreur'+jwres.body.err);
+            }
+        })
+    }
 })
 .config(function(localStorageServiceProvider){
   localStorageServiceProvider
@@ -140,6 +168,6 @@ angular.module('starter',
 
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/#');
+    $urlRouterProvider.otherwise('/');
 });
 

@@ -5,7 +5,7 @@
         </div>
         <h1 class="title">Administration: Utilisateurs</h1>
         <div class="buttons">
-            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
         </div>
     </ion-header-bar>
     <ion-content>
@@ -30,8 +30,8 @@
                     <td data-title="'N°Tel'">
                         {{user.phoneNumber}}
                     </td>
-                    <td data-title="'Compagnie'">
-                        {{user.company.name}}
+                    <td data-title="'Rang'">
+                        {{user.right}}
                     </td>
                     <td data-title="'Supprimer'">
                         <button class="button button-small button-icon" ng-click="removeUser({{user.id}})">
@@ -70,13 +70,11 @@
                         <label class="item item-input">
                             <label>Rang:  <br></label>
                             <select ng-model="newUser.right" ng-init="newUser.right = 'User'" class="form-control" style="width:15%" >
-                                <option value="User">Utilisateur</option>
-                                <option value="Admin">Administrateur</option>
-
-                                <option value="0" disabled>Transporteur</option>
-                                <option value="1" disabled>Réparateur</option>
-                                <option value="2" disabled>Gestionnaire</option>
-                                <option value="3" disabled>Administrateur</option>
+                                <option value="Utilisateur">Utilisateur</option>
+                                <option value="Administrateur">Administrateur</option>
+                                <option value="Transporteur">Transporteur</option>
+                                <option value="Réparateur">Réparateur</option>
+                                <option value="Gestionnaire">Gestionnaire</option>
                             </select>
                         </label>
                     </div>

@@ -15,7 +15,7 @@ angular.module('problems.controllers',[])
 
         $scope.goToHome = function () {
             $state.go("home",{},{reload:false});
-        }
+        };
 
         // ========= LES FONCTIONS DU SCOPE ============================
 
@@ -26,4 +26,4 @@ angular.module('problems.controllers',[])
 
         // ========= LES EVENEMENTS ====================================
 
-    }])
+    }]);

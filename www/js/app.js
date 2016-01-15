@@ -14,55 +14,61 @@ angular.module('starter',
     'manage.controllers',
     'users.services',
     'provider',
+    'storage',
     'satellizer',
+    'LocalStorageModule',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth,$state) {
+.run(function($ionicPlatform, $rootScope, $auth,Storage) {
     $ionicPlatform.ready(function() {
         if(window.cordova && window.cordova.plugins.Keyboard) {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-            // for form inputs)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-            // Don't remove this line unless you know what you are doing. It stops the viewport
-            // from snapping when text inputs are focused. Ionic handles this internally for
-            // a much nicer keyboard experience.
-            cordova.plugins.Keyboard.disableScroll(true);
+            //cordova.plugins.Keyboard.disableScroll(true);
         }
         if(window.StatusBar) {
             StatusBar.styleDefault();
         }
+        //$auth.setStorageType('sessionStorage');
+    });
 
-        $rootScope.$on('$stateChangeStart', function (event, next) {
-            var authenticationRequired = next.data.authenticationRequired;
-            clearInterval();
-            console.log("stateChangeStart");
-            if (authenticationRequired && !$auth.isAuthenticated()) {
-                $state.go('app');
-            }
-            else if($auth.isAuthenticated()){
-                setInterval(updateLocation, 1000);
-            }
-        });
-
-        if($auth.isAuthenticated()){
-            setInterval(updateLocation, 1000);
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+        var authenticationRequired = next.data.authenticationRequired;
+        if (authenticationRequired && !$auth.isAuthenticated()) {
+            event.preventDefault();
         }
-
-        function updateLocation() {
-            console.log("envoi location");
-            io.socket.put("http://localhost:1337/truck/:id/update",{token:"",location:""},function(truck,jwres){
-                if(jwres.statusCode == 201){
-                    console.log(truck);
-                }
-                else{
-                    console.log('Erreur'+jwres.body.err);
-                }
-            })
+        else if($auth.isAuthenticated() && Storage.getStorage("user").data.user.right == "Transporteur"){
+            $rootScope.$emit("startInterval");
         }
+    });
 
+    if($auth.isAuthenticated()&& Storage.getStorage("user").data.user.right == "Transporteur"){
+        $rootScope.$emit("startInterval");
+    }
 
-  });
+    var myInterval;
+    $rootScope.$on("stopInterval",function(event,data){
+        clearInterval(myInterval);
+    });
+
+    $rootScope.$on("startInterval",function(event,data){
+        myInterval = setInterval(updateLocation,30000);
+    });
+
+    function updateLocation() {
+        console.log("envoi location");
+        io.socket.put("http://localhost:1337/truck/:id/update",{token:"",id:"",location:""},function(truck,jwres){
+            if(jwres.statusCode == 201){
+                console.log(truck);
+            }
+            else{
+                console.log('Erreur'+jwres.body.err);
+            }
+        })
+    }
+})
+.config(function(localStorageServiceProvider){
+  localStorageServiceProvider
+    .setStorageType('sessionStorage');
 })
 
 .config(function ($stateProvider, $urlRouterProvider) {
@@ -92,9 +98,9 @@ angular.module('starter',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
             data: {
-              'authenticationRequired' : true
-            },
-            params: {'vehicule':{etat:false,problems:[]}}
+              'authenticationRequired' : true,
+              'vehicule':{etat:false,problems:[]}
+            }
         })
 
         .state('manageMenu', {
@@ -162,6 +168,6 @@ angular.module('starter',
 
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/#');
+    $urlRouterProvider.otherwise('/');
 });
 

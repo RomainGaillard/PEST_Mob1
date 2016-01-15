@@ -43,7 +43,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         var getAllTrucks = function(){
             $(".table-responsive").hide();
@@ -67,7 +67,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         var getAllPannes = function(){
             $(".table-responsive").hide();
@@ -91,7 +91,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         var getAllCompanys = function(){
             $(".table-responsive").hide();
@@ -115,7 +115,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         var getAllTypesPanne = function(){
             $(".table-responsive").hide();
@@ -142,7 +142,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         var getAllRepairmans = function(){
             $(".table-responsive").hide();
@@ -167,7 +167,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         // ======== INITIALISATION ===================================
         switch($ionicHistory.currentStateName()) {
@@ -198,25 +198,26 @@ angular.module('manage.controllers',['ngTable'])
 
         $scope.goToManageUsers = function () {
             $state.go("manageUsers");
-        }
+        };
         $scope.goToManageTrucks = function () {
             $state.go("manageTrucks");
-        }
+        };
         $scope.goToManagePannes = function () {
             $state.go("managePannes");
-        }
+        };
         $scope.goToManageTypesPanne = function () {
             $state.go("manageTypesPanne");
-        }
+        };
         $scope.goToManageRepairmans = function () {
             $state.go("manageRepairmans");
-        }
+        };
         $scope.goToManageCompanys = function () {
             $state.go("manageCompanys");
-        }
+        };
+
         $scope.goToBack = function(){
             $state.go("manageMenu");
-        }
+        };
 
         // ========= LES FONCTIONS DU SCOPE ============================
 
@@ -227,7 +228,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createUser = function(){
             UserProvider.create($scope.newUser).then(function(res){
@@ -236,7 +237,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         $scope.removeTruck = function(id){
             TruckProvider.remove(id).then(function(res) {
@@ -245,7 +246,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createTruck = function(){
             console.log($scope.newTruck.running)
@@ -255,7 +256,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         $scope.removePanne = function(id){
             PanneProvider.remove(id).then(function(res) {
@@ -264,7 +265,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createPanne = function(){
             console.log($scope.newPanne.typePanne)
@@ -274,7 +275,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         $scope.removeCompany = function(id){
             CompanyProvider.remove(id).then(function(res) {
@@ -283,7 +284,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createCompany = function(){
             console.log($scope.newCompany.type);
@@ -293,7 +294,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         $scope.removeTypePanne = function(id){
             TypePanneProvider.remove(id).then(function(res) {
@@ -302,7 +303,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createTypePanne = function(){
             TypePanneProvider.create($scope.newTypePanne).then(function(res){
@@ -311,7 +312,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         $scope.removeRepairman = function(id){
             RepairmanProvider.remove(id).then(function(res) {
@@ -320,7 +321,7 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 });
-        }
+        };
 
         $scope.createRepairman = function(){
             RepairmanProvider.create($scope.newRepairman).then(function(res){
@@ -329,11 +330,9 @@ angular.module('manage.controllers',['ngTable'])
                 .catch(function(err){
                     console.log(err);
                 })
-        }
+        };
 
         // ========= LES POPUPS ========================================
 
         // ========= LES EVENEMENTS ====================================
-
-
-    }])
+  }]);

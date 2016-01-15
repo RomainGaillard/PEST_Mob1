@@ -7,7 +7,7 @@
 /*(function(){
   'use strict';
   angular
-    .module('provider', [])
+    .module('provider', ['restangular'])
     .factory('UserProvider', UserProvider);
 
   UserProvider.$inject = [

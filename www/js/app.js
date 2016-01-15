@@ -3,6 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
+
 angular.module('starter',
   ['ionic',
     'login.controllers',
@@ -14,7 +15,7 @@ angular.module('starter',
     'satellizer',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth) {
+.run(function($ionicPlatform, $rootScope, $auth,$state) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -59,9 +60,9 @@ angular.module('starter',
             data: {
               'authenticationRequired' : true
             }
-        });
+        })
 
-        /*.state('problems',{
+        .state('problems',{
             url:'/problems',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
@@ -73,10 +74,10 @@ angular.module('starter',
 
         .state('manageMenu', {
             url: '/manage_menu',
-            templateUrl: 'templates/manager_menu.html',
+            templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl",
             data: {
-              'authenticationRequired' : true
+                'authenticationRequired' : false
             }
         })
 
@@ -87,7 +88,7 @@ angular.module('starter',
             data: {
               'authenticationRequired' : true
             }
-        });*/
+        });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/#');

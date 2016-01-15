@@ -1,7 +1,7 @@
-﻿/*angular.module('login.controllers',[])
+﻿/*angular.module('login.controllers',['satellizer'])
 
 
-.controller('LoginCtrl', ['$scope', '$state','$rootScope', function ($scope, $state,$rootScope) {
+.controller('LoginCtrl', ['$scope', '$state','$auth','$ionicPopup', function ($scope,$state, $auth, $ionicPopup) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
@@ -35,11 +35,12 @@
 
     // ========= LES EVENEMENTS ====================================
 
-}])*/
-
+}])
+*/
 /**
  * Created by damienp on 06/11/15.
  */
+
 (function(){
   'use strict';
 
@@ -56,9 +57,10 @@
   ];
 
   function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup) {
+
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
-
+    
     if ($auth.isAuthenticated()){
       $state.go('home');
     }
@@ -89,6 +91,5 @@
       });
     }
   }
-
 })();
 

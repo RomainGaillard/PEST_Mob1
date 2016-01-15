@@ -2,37 +2,57 @@
  * Created by Romain Gaillard on 08/01/2016.
  */
 
-angular.module('manage.controllers',[])
+/*angular.module('manage.controllers',[])
 
 
-    .controller('ManageCtrl', ['$scope', '$state','$rootScope', function ($scope, $state,$rootScope) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider', function ($scope, $state, UserProvider) {*/
+(function() {
+  'use strict';
 
-        // ======== LES VARIABLES DU SCOPE ==========================
-        $scope.users = {};
+  angular
+    .module('manage.controllers', [])
+    .controller('ManageCtrl', ManageCtrl);
 
-        // ======== INITIALISATION ===================================
+  ManageCtrl.$inject = [
+    'UserProvider'
+  ];
+  function ManageCtrl(UserProvider) {
+    // ======== LES VARIABLES DU SCOPE ==========================
+    $scope.users = UserProvider.getAll()
+      .then(function (res) {
+        return res;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
+})();
+        /*// ======== INITIALISATION ===================================
 
         // ======== VARIABLES INTERNES ===============================
 
         // ========= LES ROUTES ======================================
 
-        var goToManageUsers = function () {
+        $scope.goToManageUsers = function () {
             $state.go("manageUsers");
         };
-        var goToManageTrucks = function () {
+        $scope.goToManageTrucks = function () {
             $state.go("manageTrucks");
         };
-        var goToManagePannes = function () {
+        $scope.goToManagePannes = function () {
             $state.go("managePannes");
         };
-        var goToManageTypesPanne = function () {
+        $scope.goToManageTypesPanne = function () {
             $state.go("manageTypesPanne");
         };
-        var goToManageRepairmans = function () {
+        $scope.goToManageRepairmans = function () {
             $state.go("manageRepairmans");
         };
-        var goToManageCompanys = function () {
+        $scope.goToManageCompanys = function () {
             $state.go("manageCompanys");
+        };
+        $scope.goToBack = function(){
+            $state.go("manageMenu");
         };
 
         // ========= LES FONCTIONS DU SCOPE ============================
@@ -42,5 +62,5 @@ angular.module('manage.controllers',[])
         // ========= LES POPUPS ========================================
 
         // ========= LES EVENEMENTS ====================================
-
-    }]);
+*/
+  //}]);

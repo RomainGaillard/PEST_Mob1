@@ -1,6 +1,12 @@
 <ion-view>
     <ion-header-bar align-title="center" class="bar">
+        <div class="buttons">
+            <a ng-click="goToBack()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
         <h1 class="title">Administration: Utilisateurs</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="logout()"> </a>
+        </div>
     </ion-header-bar>
     <ion-content>
 
@@ -9,11 +15,5 @@
                 <td>#{{user.lastname}}</td>
             </tr>
         </tables>
-        <button class="button button-positive center-block" ng-click="goToManageUsers()">Utilisateurs</button>
-        <button class="button button-positive center-block" ng-click="goToManageTrucks()">Véhicules</button>
-        <button class="button button-positive center-block" ng-click="goToManagePannes()">Pannes</button>
-        <button class="button button-positive center-block" ng-click="goToManageTypesPanne()">Types de panne</button>
-        <button class="button button-positive center-block" ng-click="goToManageRepairmans()">Réparateurs</button>
-        <button class="button button-positive center-block" ng-click="goToManageCompanys()()">Company</button>
     </ion-content>
 </ion-view>

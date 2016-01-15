@@ -54,10 +54,11 @@
     '$state',
     '$auth',
     '$ionicPopup',
-    '$ionicHistory'
+    '$ionicHistory',
+    'Storage'
   ];
 
-  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory) {
+  function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory, Storage) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
@@ -74,6 +75,7 @@
       $auth.login({email: angular.lowercase($scope.myUser.identifier), password:  $scope.myUser.password})
         .then(function (response) {
           $rootScope.authenticationRequired = true;
+          Storage.setStorage('user', response);
           $state.go('home');
         })
         .catch(function (error) {
@@ -86,7 +88,7 @@
       $rootScope.authenticationRequired = false;
       $auth.logout()
         .then(function(){
-          //Storage.clearStorage();
+          Storage.clearStorage();
           $state.go('app');
         })
         .catch(function(response){

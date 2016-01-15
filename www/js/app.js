@@ -14,10 +14,12 @@ angular.module('starter',
     'manage.controllers',
     'users.services',
     'provider',
+    'storage',
     'satellizer',
+    'LocalStorageModule',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth, $http, $state) {
+.run(function($ionicPlatform, $rootScope, $auth) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -26,6 +28,7 @@ angular.module('starter',
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+    //$auth.setStorageType('sessionStorage');
   });
 
   $rootScope.$on('$stateChangeStart', function (event, next) {
@@ -34,6 +37,10 @@ angular.module('starter',
       event.preventDefault();
     }
   });
+})
+.config(function(localStorageServiceProvider){
+  localStorageServiceProvider
+    .setStorageType('sessionStorage');
 })
 
 .config(function ($stateProvider, $urlRouterProvider) {

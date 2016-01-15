@@ -10,6 +10,7 @@
     "satellizer": "~0.13.0",
     "restangular": "~1.5.1",
     "bootstrap": "~3.3.6",
-    "ng-table": "~0.8.3"
+    "ng-table": "~0.8.3",
+    "angular-local-storage": "~0.2.3"
   }
 }

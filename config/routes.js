@@ -45,8 +45,20 @@ module.exports.routes = {
    * Les routes du model PANNE
   ***************************************************************************/
   //'post /panne':"PanneController.create",
-  'put /panne':"PanneController.update",
-  'get /panne/:id_truck':"PanneController.getMyPannes"
+  'put /panne/:id_panne':"PanneController.update",
+
+  /***************************************************************************
+   * Les routes du model TRUCK
+   ***************************************************************************/
+  'get /truck/:id_truck/pannes':"TruckController.getPannesByTruck",
+  'get /truck':"TruckController.trucks",
+  'put /truck/:id_truck':"TruckController.update",
+
+  /***************************************************************************
+   * Les routes du model COMPANY
+   ***************************************************************************/
+
+  'get /company/:id_company/trucks':"CompanyController.getTrucksByCompany",
 
 /**  GET /boat -> BoatController.find                                        *
   *  GET /boat/:id -> BoatController.findOne                                 *

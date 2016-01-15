@@ -10,9 +10,11 @@ var panneModel = require('../models/Panne.js');
 
 module.exports = {
 
-    /*create: function(req,res){
+//todo régler le probleme quand on fait notre propre create d'éléments invalides
+
+/*    create: function(req,res){
         //panneModel.comment = req.param('comment');
-        Panne.create().exec(function(err,panne){
+        Panne.create(req.body).exec(function(err,panne){
             if(panne){
                 sails.log.debug("=> Creation PANNE: Succès");
                 console.log(panne);
@@ -24,12 +26,27 @@ module.exports = {
             return res.status(400).json({err:"create Panne: Erreur. "+err})
         })
     },*/
+
+    // todo relation one to one si on change l'id du truck il faut que l'ancien truck et le nouveau le sache
     update:function(req,res){
-        Panne.findOne({id:req.param("idPanne")}).exec(function(err,panne) {
+        var comment = req.param("comment");
+        var priority = req.param("priority");
+        var state = req.param("state");
+        var typePanne = req.param("type_panne");
+        Panne.findOne({id:req.param("id_panne")}).exec(function(err,panne) {
             if (panne) {
-                panne.comment = req.param("comment");
-                panne.priority = req.param("priority");
-                panne.state = req.param("state");
+                if(comment && !ToolsService.isEmpty){
+                    panne.comment = comment;
+                }
+                if(priority && !ToolsService.isEmpty){
+                    panne.priority = priority
+                }
+                if(state && !ToolsService.isEmpty){
+                    panne.state = state
+                }
+                if(typePanne && !ToolsService.isEmpty){
+                    panne.typePanne = typePanne
+                }
 
                 panne.save(function (err) {
                     if (err) {
@@ -41,19 +58,9 @@ module.exports = {
                     Panne.publishUpdate(panne.id, panne);
                     return res.status(200).json({updated:panne});
                 })
-            }
+            }else return res.notFound({error:"panne not found"})
         })
     },
-    getMyPannes:function(req,res){
-        Panne.find({truck:req.param("idTruck")}).exec(function(err,pannes){
-            if(pannes){
-                sails.log.debug("=> GetMyPannes: Succès");
-                return res.status(200).json({pannes:pannes})
-            }
-            sails.log.debug("=> GetMyPannes: Erreur");
-            return res.status(400).json({err:"get (my) Pannes: Erreur"})
-        })
-    }
 
 };
 

@@ -18,7 +18,9 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
   // connection: 'localDiskDb',
-  connection: 'MysqlSailsProject',
+  //connection: 'MysqlSailsProject',
+  connection: [ 'rabbitCluster', 'MysqlSailsProject' ],
+  routingKey: [ 'stream', 'parentMessage' ],
 
   /***************************************************************************
   *                                                                          *

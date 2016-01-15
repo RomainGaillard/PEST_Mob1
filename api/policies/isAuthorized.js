@@ -38,7 +38,7 @@ module.exports = function (req, res, next) {
         User.findOne({id:req.token.id}).exec(function(err,user){
             if(err) return res.serverError
             req.user = user
-            console.log(req)
+            console.log(req.user.name)
         })
         next();
     });

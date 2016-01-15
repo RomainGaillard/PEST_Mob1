@@ -44,8 +44,8 @@ module.exports = {
 
     right: {
       type: 'string',
-      enum:['User','Admin'],
-      defaultsTo:'User'},
+      enum:['Utilisateur','Administrateur','Transporteur','Réparateur',"Gestionnaire"],
+      defaultsTo:'Utilisateur'},
 
     phoneNumber: {
       type: 'string',

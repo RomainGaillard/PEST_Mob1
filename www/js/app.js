@@ -12,7 +12,6 @@ angular.module('starter',
     'home.controllers',
     'problems.controllers',
     'manage.controllers',
-    'users.services',
     'provider',
     'storage',
     'satellizer',
@@ -36,35 +35,13 @@ angular.module('starter',
         if (authenticationRequired && !$auth.isAuthenticated()) {
             event.preventDefault();
         }
-        else if($auth.isAuthenticated() && Storage.getStorage("user").data.user.right == "Transporteur"){
-            $rootScope.$emit("startInterval");
-        }
     });
 
-    if($auth.isAuthenticated()&& Storage.getStorage("user").data.user.right == "Transporteur"){
-        $rootScope.$emit("startInterval");
-    }
 
-    var myInterval;
+    $rootScope.myInterval;
     $rootScope.$on("stopInterval",function(event,data){
-        clearInterval(myInterval);
+        clearInterval($rootScope.myInterval);
     });
-
-    $rootScope.$on("startInterval",function(event,data){
-        myInterval = setInterval(updateLocation,30000);
-    });
-
-    function updateLocation() {
-        console.log("envoi location");
-        io.socket.put("http://localhost:1337/truck/:id/update",{token:"",id:"",location:""},function(truck,jwres){
-            if(jwres.statusCode == 201){
-                console.log(truck);
-            }
-            else{
-                console.log('Erreur'+jwres.body.err);
-            }
-        })
-    }
 })
 .config(function(localStorageServiceProvider){
   localStorageServiceProvider
@@ -88,6 +65,7 @@ angular.module('starter',
             url: '/home',
             templateUrl: 'templates/home.html',
             controller:'HomeCtrl',
+            cache:false,
             data: {
               'authenticationRequired' : true
             }

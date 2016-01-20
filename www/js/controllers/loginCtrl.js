@@ -64,14 +64,14 @@
     function goToHome(){
       console.log(Storage.getStorage("user").data.user.right);
       switch(Storage.getStorage("user").data.user.right){
-        case "Utilisateur": $state.go("home");
+        case "Utilisateur": $state.go("home",{},{reload:true});
               break;
         case "Administrateur":
               console.log("oooook")
               $state.go("manageMenu");
               break;
         default:
-              $state.go("home");
+              $state.go("home",{},{reload:true});
               break;
       }
     }

@@ -12,7 +12,8 @@ angular.module('provider')
             'remove': remove,
             'update': update,
             'getAll': getAll,
-            'getOne': getOne
+            'getOne': getOne,
+            'getOneByTruck': getOneByTruck
         };
 
         function create(panne) {
@@ -35,6 +36,8 @@ angular.module('provider')
             return provider.one('panne', idPanne).get();
         }
 
-
+        function getOneByTruck(idTruck){
+            return provider.one('truck', idTruck).one('pannes').customGET();
+        }
     }]);
 //})();

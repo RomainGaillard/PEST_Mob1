@@ -19,7 +19,7 @@ angular.module('starter',
     'LocalStorageModule',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth,Storage) {
+.run(function($ionicPlatform, $rootScope, $auth, Storage) {
     $ionicPlatform.ready(function() {
         if(window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

@@ -90,7 +90,26 @@
             console.log("Could not get location");
             getMap();
         });
-    }
+    };
+
+    var sendProblem = function(newPanne) {
+      newPanne.truck = Storage.getStorage('user').data.user.truck;
+      if (newPanne.truck != null) {
+
+          PanneProvider.create(newPanne)
+              .then(function (response) {
+                  TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
+                      .then(function (response) {
+                          $scope.vehicule.problems = response.pannes;
+                          console.log($scope.vehicule.problems);
+                      }).catch(function (error) {
+
+                  });
+              }).catch(function (error) {
+
+          });
+      } else console.log("Vous n'avez pas de camion associé.");
+  };
 
       var sendProblem = function(newPanne) {
           console.log(newPanne);
@@ -148,7 +167,6 @@
         TypePanneProvider.getAll()
           .then(function(response){
             $scope.listTypePanne = response;
-
             var myPopup = $ionicPopup.show({
               templateUrl: "templates/formulaires/sendPanne.html",
               title: "Signalement d'un problème",

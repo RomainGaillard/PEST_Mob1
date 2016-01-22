@@ -1,8 +1,7 @@
 ﻿angular.module('home.controllers')
 
-
-.controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup','Storage','$rootScope','$auth','TruckProvider', function (
-    $scope, $state,$cordovaGeolocation,$ionicPopup,Storage,$rootScope,$auth,TruckProvider) {
+.controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup', 'TypePanneProvider', 'TruckProvider', 'PanneProvider', 'Storage',
+  function ($scope, $state,$cordovaGeolocation,$ionicPopup, TypePanneProvider, TruckProvider,PanneProvider, Storage) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = Storage.getStorage("user").data.user;
@@ -64,6 +63,14 @@
     // ======== INITIALISATION ===================================
     getMap();
 
+
+    TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
+      .then(function(response){
+        $scope.vehicule.problems = response.pannes;
+      }).catch(function(error){
+
+    });
+
     // ========= LES ROUTES ======================================
 
     $scope.goToProblems = function(){
@@ -71,33 +78,65 @@
     };
     // ========= LES FONCTIONS DU SCOPE ============================
 
+    // ========= LES FONCTIONS INTERNES ============================
+
+    var sendProblem = function(newPanne) {
+      console.log(newPanne);
+      newPanne.truck = Storage.getStorage('user').data.user.truck;
+      PanneProvider.create(newPanne)
+        .then(function(response){
+        TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
+          .then(function(response){
+            $scope.vehicule.problems = response.pannes;
+            console.log($scope.vehicule.problems);
+          }).catch(function(error){
+
+        });
+      }).catch(function(error){
+
+      });
+
+        //$scope.vehicule.problems.push(reason);
+        //$('.problems').show();
+    };
+
     // ========= LES POPUPS ========================================
 
     $scope.reportProblem = function() {
-        $scope.data = {};
-        // An elaborate, custom popup
-        var myPopup = $ionicPopup.show({
-            template: '<textarea ng-model="data.reason" rows="3" ></textarea>',
-            title: "Signalement d'un problème",
-            cssClass:"popupReportProblem",
-            subTitle: 'Indiquer votre problème',
-            scope: $scope,
-            buttons: [
+        $scope.newPanne = {};
+        $scope.listTypePanne = {};
+        TypePanneProvider.getAll()
+          .then(function(response){
+            $scope.listTypePanne = response;
+
+            var myPopup = $ionicPopup.show({
+              templateUrl: "templates/formulaires/sendPanne.html",
+              title: "Signalement d'un problème",
+              cssClass:"popupReportProblem",
+              subTitle: 'Indiquer votre problème',
+              scope: $scope,
+              controller: 'HomeCtrl',
+              buttons: [
                 { text: 'Annuler' },
                 {
-                    text: '<b>Envoyer</b>',
-                    type: 'button-assertive',
-                    onTap: function(e) {
-                        if ($scope.data.reason == undefined || $scope.data.reason == "") {
-                            //don't allow the user to close unless he enters wifi password
-                            e.preventDefault();
-                        } else {
-                            sendProblem($scope.data.reason);
-                        }
+                  text: '<b>Envoyer</b>',
+                  type: 'button-assertive',
+                  onTap: function(e) {
+                    console.log($scope.newPanne.comment);
+                    if ($scope.newPanne.comment == undefined || $scope.newPanne.comment == "") {
+                      e.preventDefault();
+                    } else {
+                      console.log($scope.newPanne);
+                      sendProblem($scope.newPanne);
                     }
+                  }
                 }
-            ]
-        });
+              ]
+            });
+          })
+          .catch(function(error){
+            console.log(error);
+          });
     };
 
     // ========= LES EVENEMENTS ====================================

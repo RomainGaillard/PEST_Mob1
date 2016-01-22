@@ -5,14 +5,17 @@
 
 angular.module('provider')
 
-    .factory('TruckProvider',['SETTINGS','Restangular', function TruckProvider(SETTINGS,Restangular) {
+    .factory('TruckProvider',['SETTINGS','Restangular','Storage', function TruckProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
+        var token = ""+Storage.getStorage("user").data.token;
         return {
             'create': create,
             'remove': remove,
             'update': update,
             'getAll': getAll,
-            'getOne': getOne
+            'getOne': getOne,
+            'updateLocation':updateLocation,
+            'getAll_socket':getAll_socket
         };
 
         function create(truck) {
@@ -33,6 +36,34 @@ angular.module('provider')
 
         function getOne(idTruck){
             return provider.one('truck', idTruck).get();
+        }
+
+        function updateLocation(latLng){
+            var idTruck = Storage.getStorage("user").data.user.truck;
+            var loc = JSON.stringify(latLng);
+            io.socket.put("http://localhost:1337/truck/"+idTruck,{token:token,location:loc},function(truck,jwres){
+                if(jwres.statusCode == 200){
+                    console.log(truck);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                }
+            })
+        }
+
+        function getAll_socket(callback){
+            io.socket.get("http://localhost:1337/truck/",{token:token},function(trucks,jwres){
+                if(jwres.statusCode == 200){
+                    console.log(trucks);
+                    callback(trucks);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                    callback(new Array());
+                }
+            })
         }
     }]);
 //})();

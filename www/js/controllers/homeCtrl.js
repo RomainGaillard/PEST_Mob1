@@ -1,8 +1,8 @@
-﻿angular.module('home.controllers',['ngCordova','LocalStorageModule'])
+﻿angular.module('home.controllers')
 
 
-.controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup','Storage','$rootScope','$auth', function (
-    $scope, $state,$cordovaGeolocation,$ionicPopup,Storage,$rootScope,$auth) {
+.controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup','Storage','$rootScope','$auth','TruckProvider', function (
+    $scope, $state,$cordovaGeolocation,$ionicPopup,Storage,$rootScope,$auth,TruckProvider) {
 
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = Storage.getStorage("user").data.user;
@@ -19,7 +19,7 @@
     };
 
     var startInterval = function(){
-        $rootScope.myInterval = setInterval(updateLocation,10000);
+        $rootScope.myInterval = setInterval(function() {TruckProvider.updateLocation(latLng); },10000);
     }
 
     var latLng;
@@ -57,27 +57,6 @@
             getMap();
         });
     }
-
-    function updateLocation() {
-        console.log("envoi location");
-        var token = ""+Storage.getStorage("user").data.token;
-        console.log("token:"+token);
-        var idTruck = ($scope.myUser.truck);
-        console.log(idTruck);
-        var loc = JSON.stringify(latLng);
-        console.log("location:"+loc);
-
-        io.socket.put("http://localhost:1337/truck/"+idTruck,{token:token,location:loc},function(truck,jwres){
-            if(jwres.statusCode == 200){
-                console.log(truck);
-            }
-            else{
-                console.log(jwres.statusCode)
-                console.log('Erreur'+jwres.body.err);
-            }
-        })
-    }
-
 
     // ======== VARIABLES INTERNES ===============================
     var options = {timeout: 10000, enableHighAccuracy: true};

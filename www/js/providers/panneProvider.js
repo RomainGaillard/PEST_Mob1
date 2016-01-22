@@ -34,5 +34,7 @@ angular.module('provider')
         function getOne(idPanne){
             return provider.one('panne', idPanne).get();
         }
+
+
     }]);
 //})();

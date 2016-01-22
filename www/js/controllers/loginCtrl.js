@@ -60,6 +60,9 @@
 
   function LoginCtrl($rootScope, $scope, $state, $auth, $ionicPopup,$ionicHistory, Storage) {
 
+    // ======== LES VARIABLES INTERNES =========================
+      var finVerif = true;
+
     // ======== LES FONCTIONS INTERNES ==========================
     function goToHome(){
       console.log(Storage.getStorage("user").data.user.right);
@@ -67,14 +70,35 @@
         case "Utilisateur": $state.go("home",{},{reload:true});
               break;
         case "Administrateur":
-              console.log("oooook")
               $state.go("manageMenu");
+              break;
+          case "Gestionnaire":
+              $state.go("homeGestionnaire");
               break;
         default:
               $state.go("home",{},{reload:true});
               break;
       }
     }
+
+      var showError = function(msgError){
+          if(finVerif){
+              finVerif = false;
+              $scope.msgBtConnexion = msgError;
+              $("[id='successCo']").fadeOut("fast",function(){
+                  $("[id='errorCo']").fadeIn("fast");
+              });
+
+              $("[id='btConnexion']").switchClass("button-balanced","button-assertive","fast","easeInQuart",function() {
+                  $("[id='btConnexion']").delay(1500).switchClass("button-assertive", "button-balanced", "fast", "easeInQuart",function(){
+                      $("[id='errorCo']").fadeOut("fast",function(){
+                          $("[id='successCo']").fadeIn("fast");
+                          finVerif = true;
+                      });
+                  })
+              })
+          }
+      };
     // ======== LES VARIABLES DU SCOPE ==========================
     $scope.myUser = {};
 
@@ -94,7 +118,14 @@
           goToHome();
         })
         .catch(function (error) {
-          popUp('Connexion impossible','Nom de compte ou mot de passe invalide.');
+            if(error.data.err.indexOf("required")>=0){
+                showError("Veuillez remplir tous les champs !")
+            }
+            else if(error.data.err.indexOf("invalid")>=0)
+                showError("Mot de passe ou email invalide !");
+            else
+                showError("Erreur connexion serveur:"+error.status);
+          console.log(error);
         })
       ;
     };
@@ -121,6 +152,9 @@
         buttons: [{ text: 'Ok' }]
       });
     }
+
+    // ================= INITIALISATION =======================
+      $("#errorCo").hide();
   }
 })();
 

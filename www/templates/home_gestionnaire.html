@@ -1,0 +1,22 @@
+<ion-view cache-view="false">
+    <ion-header-bar align-title="center" class="bar">
+        <h1 class="title">Bienvenue {{myUser.email}}</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="problems pointer" ng-hide="pannes.length <= 0" ng-click="goToProblems()">
+            <div class="bar bar-energized">
+                <div class="title">{{pannes.length}} problème(s) en cours...</div>
+            </div>
+        </div>
+        <div id="map" data-tap-disabled="true"></div>
+    </ion-content>
+    <div class="footer">
+        <button class="button button-full button-positive" ng-click="goToAdmin();">
+            <i class="icon ion-alert-circled"></i>
+            Accès administration ?
+        </button>
+    </div>
+</ion-view>

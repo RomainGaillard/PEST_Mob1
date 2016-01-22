@@ -4,7 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 
-angular.module('provider',['restangular'])
+angular.module('provider',['restangular','LocalStorageModule']);
+angular.module('home.controllers',['ngCordova','LocalStorageModule']);
 
 angular.module('starter',
   ['ionic',
@@ -139,6 +140,15 @@ angular.module('starter',
             url:"/manage_repairmans",
             templateUrl:'templates/manage/repairmans.html',
             controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("homeGestionnaire",{
+            url:"/home_gestionnaire",
+            templateUrl:'templates/home_gestionnaire.html',
+            controller:"HomeGestionnaireCtrl",
             data: {
                 'authenticationRequired' : true
             }

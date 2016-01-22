@@ -219,6 +219,10 @@ angular.module('manage.controllers',['ngTable'])
             $state.go("manageMenu");
         };
 
+        $scope.goToHomeGestionnaire = function(){
+            $state.go("homeGestionnaire");
+        }
+
         // ========= LES FONCTIONS DU SCOPE ============================
 
         $scope.removeUser = function(id){

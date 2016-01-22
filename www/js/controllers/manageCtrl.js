@@ -4,7 +4,6 @@
 
 angular.module('manage.controllers',['ngTable'])
 
-
     .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','RepairmanProvider','NgTableParams','$ionicHistory',
         function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,RepairmanProvider,NgTableParams,$ionicHistory) {
 

@@ -1,47 +1,4 @@
-﻿/*angular.module('login.controllers',['satellizer'])
-
-
-.controller('LoginCtrl', ['$scope', '$state','$auth','$ionicPopup', function ($scope,$state, $auth, $ionicPopup) {
-
-    // ======== LES VARIABLES DU SCOPE ==========================
-    $scope.myUser = {};
-    $scope.myUser.identifier = "";
-    $scope.myUser.password = "";
-    $scope.msgBtConnexion = "";
-
-    // ======== INITIALISATION ===================================
-    $("[id='errorCo']").hide();
-
-    // ======== VARIABLES INTERNES ===============================
-
-    // ========= LES ROUTES ======================================
-
-    var goToHome = function () {
-        $state.go("home");
-    }
-
-    // ========= LES FONCTIONS DU SCOPE ============================
-
-    $scope.doLogin = function(){
-        goToHome();
-    }
-
-    $rootScope.logout = function(){
-        $state.go("app");
-    }
-    // ========= LES FONCTIONS INTERNES ============================
-
-    // ========= LES POPUPS ========================================
-
-    // ========= LES EVENEMENTS ====================================
-
-}])
-*/
-/**
- * Created by damienp on 06/11/15.
- */
-
-(function(){
+﻿(function(){
   'use strict';
 
   angular
@@ -65,20 +22,20 @@
 
     // ======== LES FONCTIONS INTERNES ==========================
     function goToHome(){
-      console.log(Storage.getStorage("user").data.user.right);
-      switch(Storage.getStorage("user").data.user.right){
-        case "Utilisateur": $state.go("home",{},{reload:true});
-              break;
-        case "Administrateur":
-              $state.go("manageMenu");
-              break;
-          case "Gestionnaire":
-              $state.go("homeGestionnaire");
-              break;
-        default:
-              $state.go("home",{},{reload:true});
-              break;
-      }
+        switch (Storage.getStorage("user").data.user.right) {
+            case "Utilisateur":
+                $state.go("home", {}, {reload: true});
+                break;
+            case "Administrateur":
+                $state.go("manageMenu");
+                break;
+            case "Gestionnaire":
+                $state.go("homeGestionnaire");
+                break;
+            default:
+                $state.go("home", {}, {reload: true});
+                break;
+        }
     }
 
       var showError = function(msgError){

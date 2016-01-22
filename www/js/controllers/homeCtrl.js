@@ -12,14 +12,9 @@
 
     // ========= LES FONCTIONS INTERNES ============================
 
-    var sendProblem = function(reason) {
-        $scope.vehicule.problems.push(reason);
-        //$('.problems').show();
-    };
-
     var startInterval = function(){
         $rootScope.myInterval = setInterval(function() {TruckProvider.updateLocation(latLng); },10000);
-    }
+    };
 
     var latLng;
     var getMap = function(){
@@ -55,7 +50,26 @@
             console.log("Could not get location");
             getMap();
         });
-    }
+    };
+
+    var sendProblem = function(newPanne) {
+      newPanne.truck = Storage.getStorage('user').data.user.truck;
+      if (newPanne.truck != null) {
+
+          PanneProvider.create(newPanne)
+              .then(function (response) {
+                  TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
+                      .then(function (response) {
+                          $scope.vehicule.problems = response.pannes;
+                          console.log($scope.vehicule.problems);
+                      }).catch(function (error) {
+
+                  });
+              }).catch(function (error) {
+
+          });
+      } else console.log("Vous n'avez pas de camion associé.");
+  };
 
     // ======== VARIABLES INTERNES ===============================
     var options = {timeout: 10000, enableHighAccuracy: true};
@@ -78,27 +92,6 @@
     };
     // ========= LES FONCTIONS DU SCOPE ============================
 
-    // ========= LES FONCTIONS INTERNES ============================
-
-    var sendProblem = function(newPanne) {
-      console.log(newPanne);
-      newPanne.truck = Storage.getStorage('user').data.user.truck;
-      PanneProvider.create(newPanne)
-        .then(function(response){
-        TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
-          .then(function(response){
-            $scope.vehicule.problems = response.pannes;
-            console.log($scope.vehicule.problems);
-          }).catch(function(error){
-
-        });
-      }).catch(function(error){
-
-      });
-
-        //$scope.vehicule.problems.push(reason);
-        //$('.problems').show();
-    };
 
     // ========= LES POPUPS ========================================
 
@@ -108,7 +101,6 @@
         TypePanneProvider.getAll()
           .then(function(response){
             $scope.listTypePanne = response;
-
             var myPopup = $ionicPopup.show({
               templateUrl: "templates/formulaires/sendPanne.html",
               title: "Signalement d'un problème",

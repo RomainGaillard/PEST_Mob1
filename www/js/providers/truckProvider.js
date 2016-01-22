@@ -14,8 +14,7 @@ angular.module('provider')
             'update': update,
             'getAll': getAll,
             'getOne': getOne,
-            'updateLocation':updateLocation,
-            'getAll_socket':getAll_socket
+            'updateLocation':updateLocation
         };
 
         function create(truck) {
@@ -48,20 +47,6 @@ angular.module('provider')
                 else{
                     console.log(jwres.statusCode)
                     console.log('Erreur'+jwres.body.err);
-                }
-            })
-        }
-
-        function getAll_socket(callback){
-            io.socket.get("http://localhost:1337/truck/",{token:token},function(trucks,jwres){
-                if(jwres.statusCode == 200){
-                    console.log(trucks);
-                    callback(trucks);
-                }
-                else{
-                    console.log(jwres.statusCode)
-                    console.log('Erreur'+jwres.body.err);
-                    callback(new Array());
                 }
             })
         }

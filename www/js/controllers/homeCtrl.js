@@ -10,6 +10,12 @@
     $scope.vehicule.problems = [];
 
 
+      // ======== VARIABLES INTERNES ===============================
+      var options = {timeout: 10000, enableHighAccuracy: true};
+      var mesPositions = new Array();
+      var latLng;
+      var marker;
+
     // ========= LES FONCTIONS INTERNES ============================
 
     var sendProblem = function(reason) {
@@ -17,11 +23,40 @@
         //$('.problems').show();
     };
 
-    var startInterval = function(){
-        $rootScope.myInterval = setInterval(function() {TruckProvider.updateLocation(latLng); },10000);
+    var alertInactif = function(){
+        popUp("Attention","Vous êtes inactif ?","Non")
     }
 
-    var latLng;
+    var startInterval = function(){
+        $rootScope.myInterval = setInterval(updateLocation,10000);
+    }
+
+    var updateLocation = function(){
+        updateMap();
+        if(latLng){
+            var posActu = latLng.toJSON();
+            posActu.lat = posActu.lat.toFixed(5);
+            posActu.lng = posActu.lng.toFixed(5);
+            mesPositions.push(posActu);
+            console.log(mesPositions.length);
+            if(mesPositions.length > 12){  // Inactif au bout de 120 secondes.
+                if(mesPositions[0].lat == mesPositions[mesPositions.length-1].lat && mesPositions[0].lng == mesPositions[mesPositions.length-1].lng) {
+                    alertInactif();
+                    mesPositions = new Array();
+                }
+            }
+            TruckProvider.updateLocation(latLng);
+        }
+      }
+
+    var updateMap = function(){
+        $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+            latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            if(marker)
+                marker.setPosition(latLng);
+        });
+    }
+
     var getMap = function(){
         $cordovaGeolocation.getCurrentPosition(options).then(function(position){
             latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -35,11 +70,11 @@
             //Wait until the map is loaded
             google.maps.event.addListenerOnce($scope.map, 'idle', function(){
 
-                var marker = new google.maps.Marker({
+                marker = new google.maps.Marker({
                     map: $scope.map,
                     animation: google.maps.Animation.DROP,
                     position: latLng,
-                    icon:"img/truck.svg"
+                    icon:"img/truck-red.svg"
                 });
 
                 var infoWindow = new google.maps.InfoWindow({
@@ -57,9 +92,35 @@
         });
     }
 
-    // ======== VARIABLES INTERNES ===============================
-    var options = {timeout: 10000, enableHighAccuracy: true};
+      var sendProblem = function(newPanne) {
+          console.log(newPanne);
+          newPanne.truck = Storage.getStorage('user').data.user.truck;
+          PanneProvider.create(newPanne)
+              .then(function(response){
+                  TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
+                      .then(function(response){
+                          $scope.vehicule.problems = response.pannes;
+                          console.log($scope.vehicule.problems);
+                      }).catch(function(error){
 
+                  });
+              }).catch(function(error){
+
+          });
+
+          //$scope.vehicule.problems.push(reason);
+          //$('.problems').show();
+      };
+
+      function popUp(title, subTitle,txtBt) {
+          var errorPop = $ionicPopup.show({
+              template: '<p>',
+              title: title,
+              subTitle: subTitle,
+              scope: $scope,
+              buttons: [{ text: txtBt }]
+          });
+      }
     // ======== INITIALISATION ===================================
     getMap();
 
@@ -78,27 +139,6 @@
     };
     // ========= LES FONCTIONS DU SCOPE ============================
 
-    // ========= LES FONCTIONS INTERNES ============================
-
-    var sendProblem = function(newPanne) {
-      console.log(newPanne);
-      newPanne.truck = Storage.getStorage('user').data.user.truck;
-      PanneProvider.create(newPanne)
-        .then(function(response){
-        TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
-          .then(function(response){
-            $scope.vehicule.problems = response.pannes;
-            console.log($scope.vehicule.problems);
-          }).catch(function(error){
-
-        });
-      }).catch(function(error){
-
-      });
-
-        //$scope.vehicule.problems.push(reason);
-        //$('.problems').show();
-    };
 
     // ========= LES POPUPS ========================================
 

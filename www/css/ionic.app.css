@@ -9180,3 +9180,15 @@ thead {
 .chargement {
   text-align: center;
   margin: 10px; }
+
+
+/* =========== MON CSS ================*/
+
+.infoBulle{
+  margin-top:-35px;
+}
+
+.etat-toggle .track-green{
+  background-color: #39C33C;
+  border: solid 2px green; }
+

@@ -5,14 +5,17 @@
 
 angular.module('provider')
 
-    .factory('CompanyProvider',['SETTINGS','Restangular', function CompanyProvider(SETTINGS,Restangular) {
+    .factory('CompanyProvider',['SETTINGS','Restangular','Storage', function CompanyProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
+        var token = ""+Storage.getStorage("user").data.token;
+
         return {
             'create': create,
             'remove': remove,
             'update': update,
             'getAll': getAll,
-            'getOne': getOne
+            'getOne': getOne,
+            'getTrucks':getTrucks
         };
 
         function create(company) {
@@ -33,6 +36,20 @@ angular.module('provider')
 
         function getOne(idCompany){
             return provider.one('company', idCompany).get();
+        }
+
+        function getTrucks(callback){
+            io.socket.get("http://localhost:1337/company/trucks",{token:token},function(res,jwres){
+                if(jwres.statusCode == 200){
+                    console.log(res);
+                    callback(res.trucks);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                    callback(new Array());
+                }
+            })
         }
     }]);
 //})();

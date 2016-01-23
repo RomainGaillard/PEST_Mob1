@@ -19,7 +19,7 @@ angular.module('home.controllers')
         var token = ""+Storage.getStorage("user").data.token;
         var latLng;
         var markers = new Array();
-        var infoWindow = new Array();
+        var trucksPannes = new Array();
         // ========= LES FONCTIONS INTERNES ============================
 
         var getMap = function(trucks){
@@ -110,18 +110,26 @@ angular.module('home.controllers')
                 $scope.$apply(function () {
                     if(trucks[i].pannes.length > 0){
                         $scope.pannes.push(trucks[i].pannes);
-                        console.log($scope.pannes);
+                        var truckPannes = trucks[i].pannes;
+                        truckPannes.truckName = trucks[i].name;
+                        trucksPannes.push(truckPannes);
                     }
                 });
             }
+            savePannes();
         }
+
+        var savePannes = function(){
+            Storage.setStorage('pannes', trucksPannes);
+        }
+
         // ======== INITIALISATION ===================================
         CompanyProvider.getTrucks(getMap);
 
         // ========= LES ROUTES ======================================
 
         $scope.goToProblems = function(){
-            //$state.go("problems",{vehicule:$scope.vehicule},{reload:true});
+            $state.go("problems",{reload:true});
         };
         // ========= LES FONCTIONS DU SCOPE ============================
 
@@ -130,12 +138,16 @@ angular.module('home.controllers')
         }
 
         $scope.goToProblems = function(){
-            $state.go("problems",{panne:$scope.pannes},{reload:true});
+            $state.go("problems",{pannes:$scope.pannes},{reload:true});
         }
         // ========= LES POPUPS ========================================
 
 
         // ========= LES EVENEMENTS ====================================
+
+        $rootScope.$on("truckUpdated", function (event,data) {
+            console.log(data);
+        });
 
 
     }]);

@@ -38,16 +38,30 @@ angular.module('starter',
         }
     });
 
-
     $rootScope.myInterval;
     $rootScope.$on("stopInterval",function(event,data){
         clearInterval($rootScope.myInterval);
     });
+
+    io.socket.on('truck',function(msg){
+        switch(msg.verb){
+            case "destroyed":
+                $rootScope.$emit("truckDestroyed",{msg:msg});
+                break;
+            case "updated":
+                if(msg.data.removeLock)
+                    $rootScope.$emit("truckUpdated",{msg:msg})
+                break;
+        }
+    })
 })
+
+
 .config(function(localStorageServiceProvider){
   localStorageServiceProvider
     .setStorageType('sessionStorage');
 })
+
 
 .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -77,8 +91,7 @@ angular.module('starter',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
             data: {
-              'authenticationRequired' : true,
-              'vehicule':{etat:false,problems:[]}
+                'authenticationRequired' : true,
             }
         })
 

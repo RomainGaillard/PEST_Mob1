@@ -3,11 +3,13 @@ angular.module('problems.controllers',[])
     .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider', function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider) {
 
         // ======== LES VARIABLES DU SCOPE ===========================
-        showPannes();
+        $scope.myUser = Storage.getStorage("user").data.user;
+        console.log($scope.myUser);
+
         // ======== VARIABLES INTERNES ===============================
 
         // ======== INITIALISATION ===================================
-
+        showPannes();
         // ========= LES ROUTES ======================================
 
         $scope.goToHome = function () {
@@ -29,22 +31,23 @@ angular.module('problems.controllers',[])
         // ========= LES FONCTIONS INTERNES ==========================
 
         function showPannes(){
-            console.log(Storage.getStorage('pannes'));
             $scope.pannes = Storage.getStorage('pannes');
-            if($scope.pannes <= 0)
+            if($scope.pannes <= 0) {
                 $scope.goToHome();
+            }
+            else{
+                formatDate();
+            }
+        }
 
-
-            /*
-            PanneProvider.getOneByTruck(Storage.getStorage('user').data.user.truck)
-                .then(function(response){
-                    $scope.pannes = response.pannes;
-                    console.log($scope.pannes);
-                    if($scope.pannes.length <= 0)
-                        $state.go("home");
-                }).catch(function(response){
-            });
-             */
+        function formatDate(){
+            for(var i=0;i<$scope.pannes.length;i++){
+                var date = new Date($scope.pannes[i].createdAt);
+                var h = date.getHours();
+                var m = date.getMinutes();
+                var j = date.getDate();
+                $scope.pannes[i].createdAt = "le "+j+" à "+h+"h"+m;
+            }
         }
         // ========= LES POPUPS ======================================
 

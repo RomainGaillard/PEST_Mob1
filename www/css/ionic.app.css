@@ -9192,3 +9192,22 @@ thead {
   background-color: #39C33C;
   border: solid 2px green; }
 
+.Déclarée{
+}
+
+.EnCours{
+  background-color:#1472BF;
+  color:white;
+}
+
+.Forte{
+  color:#ef473a;
+}
+
+.Moyenne{
+  color:#ffc900;
+}
+
+.Faible{
+  color:#33cd5f;
+}

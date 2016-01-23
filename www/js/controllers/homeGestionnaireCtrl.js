@@ -118,11 +118,13 @@ angular.module('home.controllers')
         var getPannes = function(trucks){
             for(var i=0;i<trucks.length;i++){
                 $scope.$apply(function () {
+                    $scope.pannes.push(trucks[i].pannes);
                     if(trucks[i].pannes.length > 0){
-                        $scope.pannes.push(trucks[i].pannes);
-                        var truckPannes = trucks[i].pannes;
-                        truckPannes.truckName = trucks[i].name;
-                        trucksPannes.push(truckPannes);
+                        for(var j=0;j<trucks[i].pannes.length;j++){
+                            var truckPanne = trucks[i].pannes[j];
+                            truckPanne.truckName = trucks[i].name;
+                            trucksPannes.push(truckPanne);
+                        }
                     }
                 });
             }
@@ -130,6 +132,7 @@ angular.module('home.controllers')
         }
 
         var savePannes = function(){
+            console.log(trucksPannes);
             Storage.setStorage('pannes', trucksPannes);
         }
 
@@ -178,7 +181,7 @@ angular.module('home.controllers')
         }
 
         $scope.goToProblems = function(){
-            $state.go("problems",{pannes:$scope.pannes},{reload:true});
+            $state.go("problems",{reload:true});
         }
         // ========= LES POPUPS ========================================
 

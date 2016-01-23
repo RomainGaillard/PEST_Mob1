@@ -25,7 +25,7 @@ angular.module('provider')
         }
 
         function update(idPanne, panne) {
-            return provider.one('panne', idPanne).customPOST(panne);
+            return provider.one('panne', idPanne).customPUT(panne);
         }
 
         function getAll() {

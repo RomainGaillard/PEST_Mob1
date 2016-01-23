@@ -10,7 +10,7 @@ angular.module('home.controllers')
 
         // ======== LES VARIABLES DU SCOPE ==========================
         $scope.myUser = Storage.getStorage("user").data.user;
-        $scope.vehicules = new Array();
+        $scope.trucks = new Array();
         $scope.pannes = new Array();
 
 
@@ -22,16 +22,30 @@ angular.module('home.controllers')
         var trucksPannes = new Array();
         // ========= LES FONCTIONS INTERNES ============================
 
+        var determinerIcon = function(i){
+            var icon = "pause";
+            if($scope.trucks[i].running)
+                icon =  "truck";
+
+            switch($scope.trucks[i].state){
+                case "En Panne":icon = icon+"-red";
+                    break;
+                default: icon = icon+"-green";
+                    break;
+            }
+            return icon;
+        }
+
         var getMap = function(trucks){
             getPannes(trucks);
             $scope.$apply(function () {
-                $scope.vehicules = trucks;
+                $scope.trucks = trucks;
             });
             $cordovaGeolocation.getCurrentPosition(options).then(function(position){
                 latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 var mapOptions = {
                     center: latLng,
-                    zoom: 10,
+                    zoom: 6,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
                 $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -41,20 +55,16 @@ angular.module('home.controllers')
                 /* Faire une boucle sur  le nombre de vehicules */
 
                 google.maps.event.addListenerOnce($scope.map, 'idle', function(){
-                    for(var i=0;i<$scope.vehicules.length;i++) {
-                        var jsonPos = JSON.parse($scope.vehicules[i].location);
+                    for(var i=0;i<$scope.trucks.length;i++) {
+                        var jsonPos = JSON.parse($scope.trucks[i].location);
                         var pos = new google.maps.LatLng(jsonPos.lat, jsonPos.lng);
-                        var name = $scope.vehicules[i].name;
-                        var icon = "truck-green";
-                        switch($scope.vehicules[i].state){
-                            case "En Panne":icon = "truck-red";
-                                break;
-                        }
+                        var name = $scope.trucks[i].name;
+
                         markers[i] = new google.maps.Marker({
                             map: $scope.map,
                             animation: google.maps.Animation.DROP,
                             position: pos,
-                            icon: "img/"+icon+".svg"
+                            icon: "img/"+determinerIcon(i)+".svg"
                         });
 
                         markers[i].infobulle = new InfoBubble({
@@ -123,6 +133,36 @@ angular.module('home.controllers')
             Storage.setStorage('pannes', trucksPannes);
         }
 
+        var refreshTruck = function(i){
+            var jsonPos = JSON.parse($scope.trucks[i].location);
+            var pos = new google.maps.LatLng(jsonPos.lat, jsonPos.lng);
+            var name = $scope.trucks[i].name;
+
+            markers[i].setIcon("img/"+determinerIcon(i)+".svg")
+            markers[i].setPosition(pos);
+
+            markers[i].infobulle.setContent(name);
+
+            /*markers[i].infobulle = new InfoBubble({
+                map: $scope.map,
+                content: name,
+                position: pos,  // Coordonnées latitude longitude du marker
+                shadowStyle: 0,  // Style de l'ombre de l'infobulle (0, 1 ou 2)
+                padding: 0,  // Marge interne de l'infobulle (en px)
+                backgroundColor: '#7EC587',  // Couleur de fond de l'infobulle
+                borderRadius: 10, // Angle d'arrondis de la bordure
+                arrowSize: 10, // Taille du pointeur sous l'infobulle
+                borderWidth: 2,  // Épaisseur de la bordure (en px)
+                borderColor: '#269835', // Couleur de la bordure
+                hideCloseButton: true, // Cacher le bouton 'Fermer'
+                arrowPosition: 50,  // Position du pointeur de l'infobulle (en %)
+                arrowStyle: 0,  // Type de pointeur (0, 1 ou 2)
+                disableAnimation: false,  // Déactiver l'animation à l'ouverture de l'infobulle
+                maxWidth:200,
+                minHeight:30,
+                disableAutoPan:true
+            });*/
+        }
         // ======== INITIALISATION ===================================
         CompanyProvider.getTrucks(getMap);
 
@@ -146,8 +186,13 @@ angular.module('home.controllers')
         // ========= LES EVENEMENTS ====================================
 
         $rootScope.$on("truckUpdated", function (event,data) {
-            console.log(data);
+            for(var i=0;i<$scope.trucks.length;i++){
+                if($scope.trucks[i].id == data.msg.truck.id){
+                    $scope.$apply(function () {
+                        $scope.trucks[i] = data.msg.truck;
+                        refreshTruck(i);
+                    });
+                }
+            }
         });
-
-
     }]);

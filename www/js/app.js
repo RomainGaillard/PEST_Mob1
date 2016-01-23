@@ -46,11 +46,10 @@ angular.module('starter',
     io.socket.on('truck',function(msg){
         switch(msg.verb){
             case "destroyed":
-                $rootScope.$emit("truckDestroyed",{msg:msg});
+                $rootScope.$emit("truckDestroyed",{msg:msg.data});
                 break;
             case "updated":
-                if(msg.data.removeLock)
-                    $rootScope.$emit("truckUpdated",{msg:msg})
+                $rootScope.$emit("truckUpdated",{msg:msg.data})
                 break;
         }
     })

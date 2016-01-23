@@ -37,7 +37,7 @@ angular.module('provider')
     }
 
     function update(idUser, user) {
-      return provider.one('user', idUser).customPOST(user);
+      return provider.one('user', idUser).customPUT(user);
     }
 
     function getAll() {

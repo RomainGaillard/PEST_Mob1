@@ -5,9 +5,7 @@
 
             // ======== LES VARIABLES DU SCOPE ==========================
             $scope.myUser = Storage.getStorage("user").data.user;
-            $scope.vehicule = {};
-            $scope.vehicule.etat = false;
-            $scope.vehicule.problems = [];
+            $scope.truck = {};
 
 
             // ======== VARIABLES INTERNES ===============================
@@ -17,6 +15,20 @@
             var marker;
 
             // ========= LES FONCTIONS INTERNES ============================
+
+            var determinerIcon = function(){
+                var icon = "pause";
+                if($scope.truck.running)
+                    icon =  "truck";
+
+                switch($scope.truck.state){
+                    case "En Panne":icon = icon+"-red";
+                        break;
+                    default: icon = icon+"-green";
+                        break;
+                }
+                return icon;
+            }
 
             var alertInactif = function(){
                 popUp("Attention","Vous êtes inactif ?","Non")
@@ -62,12 +74,11 @@
 
                     //Wait until the map is loaded
                     google.maps.event.addListenerOnce($scope.map, 'idle', function(){
-
                         marker = new google.maps.Marker({
                             map: $scope.map,
                             animation: google.maps.Animation.DROP,
                             position: latLng,
-                            icon:"img/truck-red.svg"
+                            icon:"img/"+determinerIcon()+".svg"
                         });
 
                         var infoWindow = new google.maps.InfoWindow({
@@ -92,9 +103,9 @@
                         .then(function (response) {
                             TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
                                 .then(function (response) {
-                                    $scope.vehicule.problems = response.pannes;
+                                    $scope.truck.pannes= response.pannes;
                                     savePannes(response);
-                                    console.log($scope.vehicule.problems);
+                                    console.log($scope.truck.pannes);
                                 }).catch(function (error) {
 
                             });
@@ -103,10 +114,18 @@
                     });
                 } else console.log("Vous n'avez pas de camion associé.");
             };
+            var getMyTruck = function(){
+                TruckProvider.getOne($scope.myUser.truck)
+                    .then(function(res){
+                        $scope.truck = res;
+                        console.log($scope.truck)
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }
 
             function popUp(title, subTitle,txtBt) {
-                if(errorPop)
-                    errorPop.close();
                 var errorPop = $ionicPopup.show({
                     template: '<p>',
                     title: title,
@@ -119,7 +138,7 @@
             var getMyPannes = function(){
                 TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
                     .then(function(response){
-                        $scope.vehicule.problems = response.pannes;
+                        $scope.truck.pannes = response.pannes;
                         savePannes(response);
                     }).catch(function(error){
 
@@ -135,6 +154,7 @@
             }
 
             // ======== INITIALISATION ===================================
+            getMyTruck();
             getMap();
             getMyPannes();
 
@@ -146,6 +166,10 @@
             };
             // ========= LES FONCTIONS DU SCOPE ============================
 
+            $scope.updateRunning = function(){
+                marker.setIcon("img/"+determinerIcon()+".svg");
+                TruckProvider.update($scope.truck.id,$scope.truck);
+            }
 
             // ========= LES POPUPS ========================================
 

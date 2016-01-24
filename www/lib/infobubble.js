@@ -230,6 +230,7 @@ InfoBubble.prototype.buildDom_ = function() {
   contentContainer.style['cursor'] = 'default';
   contentContainer.style['clear'] = 'both';
   contentContainer.style['position'] = 'relative';
+  contentContainer.className = ' '+ "infoBulleContent";
 
   var content = this.content_ = document.createElement('DIV');
   contentContainer.appendChild(content);

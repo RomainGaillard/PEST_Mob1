@@ -1,0 +1,16 @@
+<ion-view cache-view="false">
+    <ion-header-bar align-title="center" class="bar">
+        <h1 class="title">Bienvenue {{myUser.firstname}} {{myUser.lastname}}</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="problems pointer" ng-click="goToProblems()" ng-init="pannes.length <= 0 ? myClass='bar-balanced' : myClass='bar-energized'">
+            <div class="bar" ng-class="myClass">
+                <div class="title">{{pannes.length}} problème(s) en cours...</div>
+            </div>
+        </div>
+        <div id="map" data-tap-disabled="true"></div>
+    </ion-content>
+</ion-view>

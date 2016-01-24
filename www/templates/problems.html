@@ -14,9 +14,10 @@
         </div>
 
         <table style="width:100%">
-            <tr>
+            <tr style="background-color:#D2D2D2;">
                 <td style="padding-left:20px">Priorité</td>
                 <td>Véhicule</td>
+                <td ng-if="myUser.right != 'Transporteur'">Adresse</td>
                 <td>Commentaire</td>
                 <td>Date</td>
                 <td>Type</td>
@@ -25,6 +26,7 @@
             <tr ng-repeat="panne in pannes" ng-init="pannes[$index].state == 'Déclarée' ? myClass = 'Déclarée' : myClass='EnCours'" ng-class="myClass">
                 <td><i class="icon ion-alert-circled" style="font-size:30px;padding-left:20px;" ng-class="classPriority" ng-init="classPriority=panne.priority"></i></td>
                 <td>{{panne.truckName}}</td>
+                <td ng-if="myUser.right != 'Transporteur'">{{panne.address}}</td>
                 <td>{{panne.comment}}</td>
                 <td>{{panne.createdAt}}</td>
                 <td>{{panne.typePanne}}</td>

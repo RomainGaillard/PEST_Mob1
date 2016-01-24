@@ -164,6 +164,15 @@ angular.module('starter',
             data: {
                 'authenticationRequired' : true
             }
+        })
+
+        .state("homeRepairman",{
+            url:"/home_repairman",
+            templateUrl:'templates/home_repairman.html',
+            controller:"HomeRepairmanCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
         });
 
 

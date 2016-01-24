@@ -9188,6 +9188,11 @@ thead {
   margin-top:-35px;
 }
 
+.infoBulleContent{
+  overflow: hidden !important;
+  padding-left:5px !important;
+}
+
 .etat-toggle .track-green{
   background-color: #39C33C;
   border: solid 2px green; }

@@ -8,13 +8,15 @@ angular.module('problems.controllers',[])
 
         // ======== VARIABLES INTERNES ===============================
 
-        // ======== INITIALISATION ===================================
-        showPannes();
         // ========= LES ROUTES ======================================
 
         $scope.goToHome = function () {
             $ionicHistory.goBack();
         };
+
+        // ======== INITIALISATION ===================================
+        showPannes();
+
 
         // ========= LES FONCTIONS DU SCOPE ==========================
 

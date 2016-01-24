@@ -13,6 +13,7 @@
             var mesPositions = new Array();
             var latLng;
             var marker;
+            var inactif = false;
 
             // ========= LES FONCTIONS INTERNES ============================
 
@@ -31,12 +32,38 @@
             }
 
             var alertInactif = function(){
-                popUp("Attention","Vous êtes inactif ?","Non")
+                if(!inactif){
+                    inactif = true;
+                    $scope.truck.running = false;
+                    $scope.updateRunning();
+                    //popUp("Attention","Vous êtes inactif ?","Non")
+                    var myPopup = $ionicPopup.show({
+                        template: "Etes-vous entrain de rouler ?",
+                        title: "Avertissement",
+                        cssClass:"popupReportProblem",
+                        subTitle: 'Vous ne bougez-plus...',
+                        scope: $scope,
+                        controller: 'HomeCtrl',
+                        buttons: [
+                            { text: 'Non' },
+                            {
+                                text: '<b>Oui</b>',
+                                type: 'button-assertive',
+                                onTap: function(e) {
+                                    inactif = false;
+                                    $scope.truck.running = true;
+                                    $scope.updateRunning();
+                                }
+                            }
+                        ]
+                    });
+                }
             }
+
             var startInterval = function(){
                 if($rootScope.myInterval)
                     clearInterval($rootScope.myInterval);
-                $rootScope.myInterval = setInterval(updateLocation,9000);
+                $rootScope.myInterval = setInterval(updateLocation,5000);
             }
             var updateLocation = function(){
                 updateMap();

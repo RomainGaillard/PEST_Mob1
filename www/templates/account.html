@@ -1,0 +1,48 @@
+<ion-view cache-view="false">
+    <ion-header-bar>
+        <div class="buttons">
+            <a ng-click="goToHome()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
+        <h1 class="title">Mon compte</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Prénom</span>
+                <input type="text" placeholder="Prénom" ng-model="myNewUser.firstname " ng-focus="reinitCase($event)">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Nom</span>
+                <input type="text" placeholder="Nom" ng-model="myNewUser.lastname" ng-focus="reinitCase($event)">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Email</span>
+                <input type="text" placeholder="Email" ng-model="myNewUser.email" ng-focus="reinitCase($event)">
+            </label>
+            <br>
+
+            <button class="button button-outline button-positive block-center" ng-click="editPassword()">
+                <i class="ion-android-sync"></i>
+                <span>  Modifier mot de passe</span>
+            </button>
+            <br>
+
+            <button id="btValidate" class="button button-full button-balanced " ng-click="updateUser()">
+                <div id="msgNormal">
+                    <i class="ion-checkmark"></i>
+                    <span>   Sauvegarder</span>
+                </div>
+                <div id="msgError">
+                    <i class="ion-alert-circled"></i>
+                    <span>   {{msgBtError}}</span>
+                </div>
+                <!--<i class="ion-checkmark"></i>-->
+                <!--<span>  Sauvegarder</span>-->
+            </button>
+
+        </div>
+    </ion-content>
+</ion-view>

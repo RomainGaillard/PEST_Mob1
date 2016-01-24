@@ -34,10 +34,7 @@ angular.module('problems.controllers',[])
 
         function showPannes(){
             $scope.pannes = Storage.getStorage('pannes');
-            if($scope.pannes <= 0) {
-                $scope.goToHome();
-            }
-            else{
+            if($scope.pannes > 0) {
                 formatDate();
             }
         }

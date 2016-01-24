@@ -14,6 +14,8 @@
             var latLng;
             var marker;
             var inactif = false;
+            var freqEnvoi = 5000;
+            var freqInactif = 12;
 
             // ========= LES FONCTIONS INTERNES ============================
 
@@ -63,7 +65,7 @@
             var startInterval = function(){
                 if($rootScope.myInterval)
                     clearInterval($rootScope.myInterval);
-                $rootScope.myInterval = setInterval(updateLocation,5000);
+                $rootScope.myInterval = setInterval(updateLocation,freqEnvoi);
             }
             var updateLocation = function(){
                 updateMap();
@@ -73,9 +75,10 @@
                     posActu.lng = posActu.lng.toFixed(5);
                     mesPositions.push(posActu);
                     console.log(mesPositions.length);
-                    if(mesPositions.length > 12){  // Inactif au bout de 120 secondes.
+                    if(mesPositions.length > freqInactif){  // Inactif au bout de 120 secondes.
                         if(mesPositions[0].lat == mesPositions[mesPositions.length-1].lat && mesPositions[0].lng == mesPositions[mesPositions.length-1].lng) {
-                            alertInactif();
+                            if($scope.truck.running)
+                                alertInactif();
                             mesPositions = new Array();
                         }
                     }
@@ -191,6 +194,10 @@
             $scope.goToProblems = function(){
                 $state.go("problems",{reload:true});
             };
+            $scope.goToAccount = function(){
+                $state.go("account");
+            };
+
             // ========= LES FONCTIONS DU SCOPE ============================
 
             $scope.updateRunning = function(){

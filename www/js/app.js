@@ -13,6 +13,7 @@ angular.module('starter',
     'home.controllers',
     'problems.controllers',
     'manage.controllers',
+    'account.controllers',
     'provider',
     'storage',
     'satellizer',
@@ -170,6 +171,15 @@ angular.module('starter',
             url:"/home_repairman",
             templateUrl:'templates/home_repairman.html',
             controller:"HomeRepairmanCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("account",{
+            url:"/account",
+            templateUrl:'templates/account.html',
+            controller:"AccountCtrl",
             data: {
                 'authenticationRequired' : true
             }

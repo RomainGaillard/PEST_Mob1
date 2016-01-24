@@ -80,7 +80,7 @@ angular.module('home.controllers')
                             icon: "img/"+determinerIcon(i)+".svg"
                         });
 
-                        var content = "";
+                        var content = "<h5>"+name+"</h5>";
                         getAddress(i,pos,name);
                         markers[i].infobulle = new InfoBubble({
                             map: $scope.map,
@@ -199,6 +199,10 @@ angular.module('home.controllers')
 
         $scope.goToProblems = function(){
             $state.go("problems",{reload:true});
+        };
+
+        $scope.goToAccount = function(){
+            $state.go("account");
         };
         // ========= LES FONCTIONS DU SCOPE ============================
 

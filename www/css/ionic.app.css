@@ -9181,38 +9181,34 @@ thead {
   text-align: center;
   margin: 10px; }
 
-
 /* =========== MON CSS ================*/
+.infoBulle {
+  margin-top: -35px; }
 
-.infoBulle{
-  margin-top:-35px;
-}
-
-.infoBulleContent{
+.infoBulleContent {
   overflow: hidden !important;
-  padding-left:5px !important;
-}
+  padding-left: 5px !important; }
 
-.etat-toggle .track-green{
+.etat-toggle .track-green {
   background-color: #39C33C;
   border: solid 2px green; }
 
-.Déclarée{
-}
+.EnCours {
+  background-color: #1472BF;
+  color: white; }
 
-.EnCours{
-  background-color:#1472BF;
-  color:white;
-}
+.Forte {
+  color: #ef473a; }
 
-.Forte{
-  color:#ef473a;
-}
+.Moyenne {
+  color: #ffc900; }
 
-.Moyenne{
-  color:#ffc900;
-}
+.Faible {
+  color: #33cd5f; }
 
-.Faible{
-  color:#33cd5f;
-}
+.block-center {
+  display: block;
+  margin: auto; }
+
+.modal-backdrop {
+  background-color: transparent !important; }

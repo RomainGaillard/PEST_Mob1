@@ -13,6 +13,7 @@ angular.module('starter',
     'home.controllers',
     'problems.controllers',
     'manage.controllers',
+    'account.controllers',
     'provider',
     'storage',
     'satellizer',
@@ -31,30 +32,57 @@ angular.module('starter',
     });
 
     $rootScope.$on('$stateChangeStart', function (event, next) {
-        var authenticationRequired = next.data.authenticationRequired;
-        if (authenticationRequired && !$auth.isAuthenticated()) {
-            event.preventDefault();
-        }
-
-        var usersAuthorized = next.data.usersAuthorized;
-        console.log(usersAuthorized);
-        if (usersAuthorized != null){
-            if (!usersAuthorized.indexOf(Storage.getStorage('user').data.user.right)){
+        if (next.data != null) {
+            var authenticationRequired = next.data.authenticationRequired;
+            if (authenticationRequired && !$auth.isAuthenticated()) {
                 event.preventDefault();
+            }
+            if ($auth.isAuthenticated()) {
+                var usersAuthorized = next.data.usersAuthorized;
+                var isOk = false;
+                if (usersAuthorized != null) {
+                    var myRight = Storage.getStorage('user').data.user.right;
+                    var log = [];
+                    console.log(myRight);
+                    angular.forEach(usersAuthorized, function (value, key) {
+                        console.log(value);
+                        if (value.toLowerCase() == myRight.toLowerCase()) {
+                            isOk = true;
+                        }
+
+                    }, log);
+                    console.log('isOk :' + isOk);
+                    if (!isOk) {
+                        event.preventDefault();
+                    }
+                }
             }
         }
     });
-
 
     $rootScope.myInterval;
     $rootScope.$on("stopInterval",function(event,data){
         clearInterval($rootScope.myInterval);
     });
+
+    io.socket.on('truck',function(msg){
+        switch(msg.verb){
+            case "destroyed":
+                $rootScope.$emit("truckDestroyed",{msg:msg.data});
+                break;
+            case "updated":
+                $rootScope.$emit("truckUpdated",{msg:msg.data})
+                break;
+        }
+    })
 })
+
+
 .config(function(localStorageServiceProvider){
   localStorageServiceProvider
     .setStorageType('sessionStorage');
 })
+
 
 .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -165,6 +193,24 @@ angular.module('starter',
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire']
+            }
+        })
+
+        .state("homeRepairman",{
+            url:"/home_repairman",
+            templateUrl:'templates/home_repairman.html',
+            controller:"HomeRepairmanCtrl",
+            data: {
+                'authenticationRequired' : true
+            }
+        })
+
+        .state("account",{
+            url:"/account",
+            templateUrl:'templates/account.html',
+            controller:"AccountCtrl",
+            data: {
+                'authenticationRequired' : true
             }
         });
 

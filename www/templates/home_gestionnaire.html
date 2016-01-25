@@ -1,6 +1,7 @@
 <ion-view cache-view="false">
     <ion-header-bar align-title="center" class="bar">
-        <h1 class="title">Bienvenue {{myUser.email}}</h1>
+        <a class="button button-icon icon ion-settings" ng-click="goToAccount()"></a>
+        <h1 class="title">Bienvenue {{myUser.firstname}} {{myUser.lastname}}</h1>
         <div class="buttons">
             <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
         </div>
@@ -11,6 +12,25 @@
                 <div class="title">{{pannes.length}} problème(s) en cours...</div>
             </div>
         </div>
+        <div class="etat">
+            <div class="etat-content">
+                <div class="etat-text">En route</div>
+                <label class="toggle etat-toggle">
+                    <input type="checkbox" disabled>
+                    <div class="track track-green">
+                        <div class="handle"></div>
+                    </div>
+                </label>
+                <div class="etat-text">En panne</div>
+                <label class="toggle etat-toggle">
+                    <input type="checkbox" disabled>
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
         <div id="map" data-tap-disabled="true"></div>
     </ion-content>
     <div class="footer">

@@ -23,8 +23,8 @@
     // ======== LES FONCTIONS INTERNES ==========================
     function goToHome(){
         switch (Storage.getStorage("user").data.user.right) {
-            case "Utilisateur":
-                $state.go("home", {}, {reload: true});
+            case "Réparateur":
+                $state.go("homeRepairman", {}, {reload: true});
                 break;
             case "Administrateur":
                 $state.go("manageMenu");

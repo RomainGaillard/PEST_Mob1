@@ -1,19 +1,24 @@
 angular.module('problems.controllers',[])
 
-    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$stateParams','$ionicHistory', 'Storage', 'PanneProvider', function ($scope, $state,$ionicPopup,$stateParams,$ionicHistory, Storage, PanneProvider) {
+    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider', function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider) {
 
-        // ======== LES VARIABLES DU SCOPE ==========================
-        showPannes();
+        // ======== LES VARIABLES DU SCOPE ===========================
+        $scope.myUser = Storage.getStorage("user").data.user;
+        console.log($scope.myUser);
+
         // ======== VARIABLES INTERNES ===============================
-
-        // ======== INITIALISATION ===================================
 
         // ========= LES ROUTES ======================================
 
-        // ========= LES FONCTIONS DU SCOPE ============================
         $scope.goToHome = function () {
-            $state.go("home",{},{reload:false});
+            $ionicHistory.goBack();
         };
+
+        // ======== INITIALISATION ===================================
+        showPannes();
+
+
+        // ========= LES FONCTIONS DU SCOPE ==========================
 
         $scope.cancelProblem = function(panne){
             PanneProvider.remove(panne.id)
@@ -25,21 +30,26 @@ angular.module('problems.controllers',[])
             })
         };
 
-        // ========= LES FONCTIONS INTERNES ============================
+        // ========= LES FONCTIONS INTERNES ==========================
 
         function showPannes(){
-            PanneProvider.getOneByTruck(Storage.getStorage('user').data.user.truck)
-                .then(function(response){
-                    $scope.pannes = response.pannes;
-                    console.log($scope.pannes);
-                    if($scope.pannes.length <= 0)
-                        $state.go("home");
-                }).catch(function(response){
-
-            });
+            $scope.pannes = Storage.getStorage('pannes');
+            if($scope.pannes > 0) {
+                formatDate();
+            }
         }
-        // ========= LES POPUPS ========================================
 
-        // ========= LES EVENEMENTS ====================================
+        function formatDate(){
+            for(var i=0;i<$scope.pannes.length;i++){
+                var date = new Date($scope.pannes[i].createdAt);
+                var h = date.getHours();
+                var m = date.getMinutes();
+                var j = date.getDate();
+                $scope.pannes[i].createdAt = "le "+j+" à "+h+"h"+m;
+            }
+        }
+        // ========= LES POPUPS ======================================
+
+        // ========= LES EVENEMENTS ==================================
 
     }]);

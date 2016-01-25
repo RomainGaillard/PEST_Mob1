@@ -24,7 +24,7 @@ angular.module('provider')
         }
 
         function update(idTypePanne, typePanne) {
-            return provider.one('type_Panne', idTypePanne).customPOST(typePanne);
+            return provider.one('type_Panne', idTypePanne).customPUT(typePanne);
         }
 
         function getAll() {

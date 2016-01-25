@@ -12,13 +12,30 @@
                 <div class="title">Aucun problème en cours !</div>
             </div>
         </div>
-        <ion-item class="row" ng-repeat="panne in pannes" item="problem">
-            <label class="col col-60 txt-problems">
-                <span>{{ panne}}</span>
-            </label>
-            <button class="col col-20 button button-icon bt-cancel-problems" ng-click="cancelProblem(panne)">
-                <i class="icon ion-android-cancel assertive"></i>
-            </button>
-        </ion-item>
+
+        <table style="width:100%">
+            <tr style="background-color:#D2D2D2;">
+                <td style="padding-left:20px">Priorité</td>
+                <td>Véhicule</td>
+                <td ng-if="myUser.right != 'Transporteur'">Adresse</td>
+                <td>Commentaire</td>
+                <td>Date</td>
+                <td>Type</td>
+                <td ng-if="myUser.right != 'Gestionnaire'">Supprimer</td>
+            </tr>
+            <tr ng-repeat="panne in pannes" ng-init="pannes[$index].state == 'Déclarée' ? myClass = 'Déclarée' : myClass='EnCours'" ng-class="myClass">
+                <td><i class="icon ion-alert-circled" style="font-size:30px;padding-left:20px;" ng-class="classPriority" ng-init="classPriority=panne.priority"></i></td>
+                <td>{{panne.truckName}}</td>
+                <td ng-if="myUser.right != 'Transporteur'">{{panne.address}}</td>
+                <td>{{panne.comment}}</td>
+                <td>{{panne.createdAt}}</td>
+                <td>{{panne.typePanne}}</td>
+                <td ng-if="myUser.right != 'Gestionnaire'">
+                    <button class="col col-20 button button-icon bt-cancel-problems" ng-click="cancelProblem(panne)">
+                        <i class="icon ion-android-cancel assertive"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
     </ion-content>
 </ion-view>

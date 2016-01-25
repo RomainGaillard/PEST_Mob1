@@ -1,22 +1,23 @@
 ﻿<ion-view cache-view="false">
     <ion-header-bar align-title="center" class="bar">
-        <h1 class="title">Bienvenue {{myUser.email}}</h1>
+        <a class="button button-icon icon ion-settings" ng-click="goToAccount()"></a>
+        <h1 class="title">Bienvenue {{myUser.firstname}} {{myUser.lastname}}</h1>
         <div class="buttons">
             <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
         </div>
     </ion-header-bar>
     <ion-content>
-        <div class="problems pointer" ng-hide="vehicule.problems.length <= 0" ng-click="goToProblems()">
+        <div class="problems pointer" ng-hide="truck.pannes.length <= 0" ng-click="goToProblems()">
             <div class="bar bar-energized">
-                <div class="title">{{vehicule.problems.length}} problème(s) en cours...</div>
+                <div class="title">{{truck.pannes.length}} problème(s) en cours...</div>
             </div>
         </div>
         <div class="etat">
             <div class="etat-content">
-                <div class="etat-text" ng-if="vehicule.etat">En route</div>
-                <div class="etat-text" ng-if="!vehicule.etat">En pause</div>
+                <div class="etat-text" ng-if="truck.running">En route</div>
+                <div class="etat-text" ng-if="!truck.running">En pause</div>
                 <label class="toggle etat-toggle">
-                    <input type="checkbox" ng-model="vehicule.etat" ng-checked="vehicule.etat">
+                    <input type="checkbox" ng-model="truck.running" ng-checked="truck.running" ng-change="updateRunning()">
                     <div class="track">
                         <div class="handle"></div>
                     </div>

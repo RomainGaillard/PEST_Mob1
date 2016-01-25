@@ -5,7 +5,7 @@
 angular.module('home.controllers')
 
 
-    .controller('HomeGestionnaireCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup','Storage','$rootScope','$auth','CompanyProvider', function (
+    .controller('HomeRepairmanCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup','Storage','$rootScope','$auth','CompanyProvider', function (
         $scope, $state,$cordovaGeolocation,$ionicPopup,Storage,$rootScope,$auth,CompanyProvider) {
 
         // ======== LES VARIABLES DU SCOPE ==========================
@@ -48,12 +48,12 @@ angular.module('home.controllers')
             })
         }
 
-
         var getMap = function(trucks){
             getPannes(trucks);
             $scope.$apply(function () {
                 $scope.trucks = trucks;
             });
+
             $cordovaGeolocation.getCurrentPosition(options).then(function(position){
                 latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 var mapOptions = {
@@ -68,6 +68,21 @@ angular.module('home.controllers')
                 /* Faire une boucle sur  le nombre de vehicules */
 
                 google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+                    var marker = new google.maps.Marker({
+                        map: $scope.map,
+                        animation: google.maps.Animation.DROP,
+                        position: latLng,
+                        icon:"img/vehicule.svg"
+                    });
+
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: "Vous êtes ici",
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infoWindow.open($scope.map, marker);
+                    });
+
                     for(var i=0;i<$scope.trucks.length;i++) {
                         var jsonPos = JSON.parse($scope.trucks[i].location);
                         var pos = new google.maps.LatLng(jsonPos.lat, jsonPos.lng);
@@ -82,6 +97,7 @@ angular.module('home.controllers')
 
                         var content = "<h5>"+name+"</h5>";
                         getAddress(i,pos,name);
+
                         markers[i].infobulle = new InfoBubble({
                             map: $scope.map,
                             content: content,
@@ -115,12 +131,12 @@ angular.module('home.controllers')
 
 
                         /*infoWindow.push(new google.maps.InfoWindow({
-                            content: name
-                        }));
+                         content: name
+                         }));
 
-                        google.maps.event.addListener(markers[i], 'click', function (i) {
-                            infoWindow[i].open($scope.map, markers[i]);
-                        });*/
+                         google.maps.event.addListener(markers[i], 'click', function (i) {
+                         infoWindow[i].open($scope.map, markers[i]);
+                         });*/
                     }
                 });
 
@@ -154,11 +170,10 @@ angular.module('home.controllers')
                     }
                 });
             }
-            //savePannes();
+            savePannes();
         }
 
         var savePannes = function(){
-            console.log(trucksPannes);
             Storage.setStorage('pannes', trucksPannes);
         }
 
@@ -173,24 +188,24 @@ angular.module('home.controllers')
             markers[i].infobulle.setContent(name);
 
             /*markers[i].infobulle = new InfoBubble({
-                map: $scope.map,
-                content: name,
-                position: pos,  // Coordonnées latitude longitude du marker
-                shadowStyle: 0,  // Style de l'ombre de l'infobulle (0, 1 ou 2)
-                padding: 0,  // Marge interne de l'infobulle (en px)
-                backgroundColor: '#7EC587',  // Couleur de fond de l'infobulle
-                borderRadius: 10, // Angle d'arrondis de la bordure
-                arrowSize: 10, // Taille du pointeur sous l'infobulle
-                borderWidth: 2,  // Épaisseur de la bordure (en px)
-                borderColor: '#269835', // Couleur de la bordure
-                hideCloseButton: true, // Cacher le bouton 'Fermer'
-                arrowPosition: 50,  // Position du pointeur de l'infobulle (en %)
-                arrowStyle: 0,  // Type de pointeur (0, 1 ou 2)
-                disableAnimation: false,  // Déactiver l'animation à l'ouverture de l'infobulle
-                maxWidth:200,
-                minHeight:30,
-                disableAutoPan:true
-            });*/
+             map: $scope.map,
+             content: name,
+             position: pos,  // Coordonnées latitude longitude du marker
+             shadowStyle: 0,  // Style de l'ombre de l'infobulle (0, 1 ou 2)
+             padding: 0,  // Marge interne de l'infobulle (en px)
+             backgroundColor: '#7EC587',  // Couleur de fond de l'infobulle
+             borderRadius: 10, // Angle d'arrondis de la bordure
+             arrowSize: 10, // Taille du pointeur sous l'infobulle
+             borderWidth: 2,  // Épaisseur de la bordure (en px)
+             borderColor: '#269835', // Couleur de la bordure
+             hideCloseButton: true, // Cacher le bouton 'Fermer'
+             arrowPosition: 50,  // Position du pointeur de l'infobulle (en %)
+             arrowStyle: 0,  // Type de pointeur (0, 1 ou 2)
+             disableAnimation: false,  // Déactiver l'animation à l'ouverture de l'infobulle
+             maxWidth:200,
+             minHeight:30,
+             disableAutoPan:true
+             });*/
         }
         // ======== INITIALISATION ===================================
         CompanyProvider.getTrucks(getMap);
@@ -200,7 +215,6 @@ angular.module('home.controllers')
         $scope.goToProblems = function(){
             $state.go("problems",{reload:true});
         };
-
         $scope.goToAccount = function(){
             $state.go("account");
         };

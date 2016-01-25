@@ -28,13 +28,20 @@ angular.module('starter',
         if(window.StatusBar) {
             StatusBar.styleDefault();
         }
-        //$auth.setStorageType('sessionStorage');
     });
 
     $rootScope.$on('$stateChangeStart', function (event, next) {
         var authenticationRequired = next.data.authenticationRequired;
         if (authenticationRequired && !$auth.isAuthenticated()) {
             event.preventDefault();
+        }
+
+        var usersAuthorized = next.data.usersAuthorized;
+        console.log(usersAuthorized);
+        if (usersAuthorized != null){
+            if (!usersAuthorized.indexOf(Storage.getStorage('user').data.user.right)){
+                event.preventDefault();
+            }
         }
     });
 
@@ -68,7 +75,8 @@ angular.module('starter',
             controller:'HomeCtrl',
             cache:false,
             data: {
-              'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['transporteur']
             }
         })
 
@@ -77,8 +85,7 @@ angular.module('starter',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
             data: {
-              'authenticationRequired' : true,
-              'vehicule':{etat:false,problems:[]}
+              'authenticationRequired' : true
             }
         })
 
@@ -87,7 +94,8 @@ angular.module('starter',
             templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -96,7 +104,8 @@ angular.module('starter',
             templateUrl:'templates/manage/users.html',
             controller:"ManageCtrl",
             data: {
-              'authenticationRequired' : true
+              'authenticationRequired' : true,
+              'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -105,7 +114,8 @@ angular.module('starter',
             templateUrl:'templates/manage/trucks.html',
             controller:"ManageCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -114,7 +124,8 @@ angular.module('starter',
             templateUrl:'templates/manage/companys.html',
             controller:"ManageCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -123,7 +134,8 @@ angular.module('starter',
             templateUrl:'templates/manage/pannes.html',
             controller:"ManageCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -141,7 +153,8 @@ angular.module('starter',
             templateUrl:'templates/manage/repairmans.html',
             controller:"ManageCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 
@@ -150,7 +163,8 @@ angular.module('starter',
             templateUrl:'templates/home_gestionnaire.html',
             controller:"HomeGestionnaireCtrl",
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire']
             }
         });
 

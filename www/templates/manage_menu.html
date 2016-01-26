@@ -11,10 +11,11 @@
         <div style="text-align:center;">
             <button class="button button-positive button-block size-30" ng-click="goToManageUsers()">Utilisateurs</button>
             <button class="button button-positive button-block size-30" ng-click="goToManageTrucks()">Véhicules</button>
-            <button class="button button-positive button-block size-30" ng-click="goToManagePannes()">Pannes</button>
-            <button class="button button-positive button-block size-30" ng-click="goToManageTypesPanne()">Types de panne</button>
-            <button class="button button-positive button-block size-30" ng-click="goToManageRepairmans()">Réparateurs</button>
-            <button class="button button-positive button-block size-30" ng-click="goToManageCompanys()()">Compagnies</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManagePannes()" ng-if="myUser.right == 'Administrateur'">Pannes</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageTypesPanne()" ng-if="myUser.right == 'Administrateur'">Types de panne</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageRepairmans()" ng-if="myUser.right == 'Administrateur'">Réparateurs</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageCompanys()" ng-if="myUser.right == 'Administrateur'">Compagnies</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageMyCompany()" ng-if="myUser.right == 'Gestionnaire'">Compagnie</button>
         </div>
     </ion-content>
 </ion-view>

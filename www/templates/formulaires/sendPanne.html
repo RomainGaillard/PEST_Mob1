@@ -12,8 +12,8 @@
   </div>
   <div style="float: left;">
     <label>Type de Panne: <br></label>
-    <select ng-model="newPanne.typePanne" ng-init="newPanne.typePanne = 'Test'" class="form-control">
-      <option ng-repeat="typePanne in listTypePanne" value ="Test">{{typePanne.name}}</option>
+    <select ng-model="newPanne.typePanne" class="form-control" ng-init="newPanne.typePanne = listTypePanne[listTypePanne.length-1].id">
+      <option ng-repeat="typePanne in listTypePanne" value ="{{typePanne.id}}" selected required>{{typePanne.name}}</option>
     </select>
   </div>
 </div>

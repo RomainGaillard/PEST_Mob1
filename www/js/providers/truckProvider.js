@@ -30,11 +30,22 @@ angular.module('provider')
         }
 
         function getAll() {
-            return provider.one('truck').getList();
+            return provider.one('trucks').getList();
         }
 
-        function getOne(idTruck){
-            return provider.one('truck', idTruck).get();
+        function getOne(idTruck,callback){
+            //return provider.one('truck', idTruck).get();
+            io.socket.get("http://localhost:1337/truck/"+idTruck,{token:token},function(truck,jwres){
+                if(jwres.statusCode == 200){
+                    //console.log(truck);
+                    callback(truck);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                }
+            })
+
         }
 
         function updateLocation(latLng){

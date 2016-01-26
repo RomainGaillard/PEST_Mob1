@@ -4,8 +4,8 @@
 
 angular.module('manage.controllers',['ngTable'])
 
-    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','RepairmanProvider','NgTableParams','$ionicHistory',
-        function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,RepairmanProvider,NgTableParams,$ionicHistory) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','RepairmanProvider','NgTableParams','$ionicHistory','Storage',
+        function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,RepairmanProvider,NgTableParams,$ionicHistory,Storage) {
 
 
         // ======== LES VARIABLES DU SCOPE ==========================
@@ -15,8 +15,9 @@ angular.module('manage.controllers',['ngTable'])
         $scope.newCompany = {};
         $scope.newTypePanne = {};
         $scope.newRepairman = {};
-
         $scope.typesPanne = {};
+        $scope.myUser = Storage.getStorage("user").data.user;
+            console.log($scope.myUser);
 
         // ========= LES FONCTIONS INTERNES ============================
 

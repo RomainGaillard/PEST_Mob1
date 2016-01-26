@@ -68,10 +68,23 @@ angular.module('starter',
     io.socket.on('truck',function(msg){
         switch(msg.verb){
             case "destroyed":
-                $rootScope.$emit("truckDestroyed",{msg:msg.data});
+                $rootScope.$emit("truckDestroyed",{id:msg.id});
                 break;
             case "updated":
+                console.log("truck updated");
                 $rootScope.$emit("truckUpdated",{msg:msg.data})
+                break;
+        }
+    })
+
+    io.socket.on('panne',function(msg){
+        console.log(msg);
+        switch(msg.verb){
+            case "destroyed":
+                $rootScope.$emit("panneDestroyed",{id:msg.id});
+                break;
+            case "updated":
+                $rootScope.$emit("panneUpdated",{msg:msg.data});
                 break;
         }
     })
@@ -112,6 +125,7 @@ angular.module('starter',
             url:'/problems',
             templateUrl:'templates/problems.html',
             controller:"ProblemsCtrl",
+            cache:false,
             data: {
               'authenticationRequired' : true
             }
@@ -190,6 +204,7 @@ angular.module('starter',
             url:"/home_gestionnaire",
             templateUrl:'templates/home_gestionnaire.html',
             controller:"HomeGestionnaireCtrl",
+            cache:false,
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire']
@@ -200,6 +215,7 @@ angular.module('starter',
             url:"/home_repairman",
             templateUrl:'templates/home_repairman.html',
             controller:"HomeRepairmanCtrl",
+            cache:false,
             data: {
                 'authenticationRequired' : true
             }
@@ -209,6 +225,7 @@ angular.module('starter',
             url:"/account",
             templateUrl:'templates/account.html',
             controller:"AccountCtrl",
+            cache:false,
             data: {
                 'authenticationRequired' : true
             }

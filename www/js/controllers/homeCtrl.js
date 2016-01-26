@@ -14,7 +14,7 @@
             var latLng;
             var marker;
             var inactif = false;
-            var freqEnvoi = 5000;
+            var freqEnvoi = 105000;
             var freqInactif = 12;
 
             // ========= LES FONCTIONS INTERNES ============================
@@ -128,31 +128,23 @@
             var sendProblem = function(newPanne) {
                 newPanne.truck = Storage.getStorage('user').data.user.truck;
                 if (newPanne.truck != null) {
-
-                    PanneProvider.create(newPanne)
-                        .then(function (response) {
-                            TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
-                                .then(function (response) {
-                                    $scope.truck.pannes= response.pannes;
-                                    savePannes(response);
-                                    console.log($scope.truck.pannes);
-                                }).catch(function (error) {
-
-                            });
-                        }).catch(function (error) {
-
+                    PanneProvider.create(newPanne, function(res){
+                        console.log(res);
+                        $scope.$apply(function(){
+                            $scope.truck.pannes.push(res.created.pannes);
+                        })
                     });
-                } else console.log("Vous n'avez pas de camion associé.");
+                }
+                else console.log("Vous n'avez pas de camion associé.");
             };
+
             var getMyTruck = function(){
-                TruckProvider.getOne($scope.myUser.truck)
-                    .then(function(res){
+                TruckProvider.getOne($scope.myUser.truck, function(res){
+                    $scope.$apply(function(){
                         $scope.truck = res;
-                        console.log($scope.truck)
-                    })
-                    .catch(function(err){
-                        console.log(err);
+                        $scope.truck.pannes = res.pannes;
                     });
+                })
             }
 
             function popUp(title, subTitle,txtBt) {
@@ -165,28 +157,10 @@
                 });
             }
 
-            var getMyPannes = function(){
-                TruckProvider.getOne(Storage.getStorage('user').data.user.truck)
-                    .then(function(response){
-                        $scope.truck.pannes = response.pannes;
-                        savePannes(response);
-                    }).catch(function(error){
-
-                });
-            }
-
-            var savePannes = function(response){
-                var pannes = response.pannes;
-                for(var i=0;i<pannes.length;i++){
-                    pannes[i].truckName = response.name;
-                }
-                Storage.setStorage('pannes', pannes);
-            }
-
             // ======== INITIALISATION ===================================
             getMyTruck();
             getMap();
-            getMyPannes();
+            //getMyPannes();
 
 
             // ========= LES ROUTES ======================================
@@ -226,13 +200,7 @@
                                     text: '<b>Envoyer</b>',
                                     type: 'button-assertive',
                                     onTap: function(e) {
-                                        console.log($scope.newPanne.comment);
-                                        if ($scope.newPanne.comment == undefined || $scope.newPanne.comment == "") {
-                                            e.preventDefault();
-                                        } else {
-                                            console.log($scope.newPanne);
-                                            sendProblem($scope.newPanne);
-                                        }
+                                        sendProblem($scope.newPanne);
                                     }
                                 }
                             ]
@@ -245,6 +213,19 @@
 
             // ========= LES EVENEMENTS ====================================
 
+            $rootScope.$on("panneDestroyed", function (event,data) {
+                for(var i=0;i<$scope.truck.pannes.length;i++){
+                    if($scope.truck.pannes[i].id == data.id){
+                        $scope.$apply(function () {
+                            $scope.truck.pannes.splice(i,1);
+                        });
+                    }
+                }
+            });
+
+            $rootScope.$on("panneUpdated", function (event,data) {
+                console.log(data);
+            });
 
             $rootScope.$on("$stateChangeSuccess",function(event,next){
                 if($auth.isAuthenticated() && Storage.getStorage("user").data.user.right == "Transporteur"){
@@ -257,7 +238,6 @@
             if($auth.isAuthenticated()&& Storage.getStorage("user").data.user.right == "Transporteur"){
                 console.log("startInterval");
                 startInterval();
-
             }
 
 

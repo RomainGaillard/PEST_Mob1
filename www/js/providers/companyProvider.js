@@ -41,7 +41,6 @@ angular.module('provider')
         function getTrucks(callback){
             io.socket.get("http://localhost:1337/company/trucks",{token:token},function(res,jwres){
                 if(jwres.statusCode == 200){
-                    console.log(res);
                     callback(res.trucks);
                 }
                 else{

@@ -1,0 +1,17 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <a ng-click="goToHomeGestionnaire()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        <h1 class="title">Gestionnaire: Menu</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <br>
+        <div style="text-align:center;">
+            <button class="button button-positive button-block size-30" ng-click="goToManageUsers()">Utilisateurs</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageTrucks()">Véhicules</button>
+            <button class="button button-positive button-block size-30" ng-click="goToManageMyCompany()()">Compagnie</button>
+        </div>
+    </ion-content>
+</ion-view>

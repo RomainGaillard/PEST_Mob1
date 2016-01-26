@@ -5,8 +5,10 @@
 
 angular.module('provider')
 
-    .factory('PanneProvider',['SETTINGS','Restangular', function PanneProvider(SETTINGS,Restangular) {
+    .factory('PanneProvider',['SETTINGS','Restangular','Storage', function PanneProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
+        var token = ""+Storage.getStorage("user").data.token;
+
         return {
             'create': create,
             'remove': remove,
@@ -16,8 +18,17 @@ angular.module('provider')
             'getOneByTruck': getOneByTruck
         };
 
-        function create(panne) {
-            return provider.one('panne').customPOST(panne);
+        function create(panne,AddPanne) {
+            //return provider.one('panne').customPOST(panne);
+            io.socket.post("http://localhost:1337/panne/",{token:token,priority:panne.priority,comment:panne.comment,truck:panne.truck,typePanne:panne.typePanne},function(panne,jwres){
+                if(jwres.statusCode == 201){
+                    AddPanne(panne);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                }
+            })
         }
 
         function remove(idPanne) {

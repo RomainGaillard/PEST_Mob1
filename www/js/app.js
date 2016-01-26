@@ -20,7 +20,7 @@ angular.module('starter',
     'LocalStorageModule',
     'ui.router'])
 
-.run(function($ionicPlatform, $rootScope, $auth, Storage) {
+.run(function($ionicPlatform, $rootScope, $auth, Storage,$state) {
     $ionicPlatform.ready(function() {
         if(window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -36,6 +36,7 @@ angular.module('starter',
             var authenticationRequired = next.data.authenticationRequired;
             if (authenticationRequired && !$auth.isAuthenticated()) {
                 event.preventDefault();
+                $state.go("app");
             }
             if ($auth.isAuthenticated()) {
                 var usersAuthorized = next.data.usersAuthorized;
@@ -78,13 +79,12 @@ angular.module('starter',
     })
 
     io.socket.on('panne',function(msg){
-        console.log(msg);
         switch(msg.verb){
             case "destroyed":
                 $rootScope.$emit("panneDestroyed",{id:msg.id});
                 break;
             case "updated":
-                $rootScope.$emit("panneUpdated",{msg:msg.data});
+                $rootScope.$emit("panneUpdated",{panne:msg.data.panne});
                 break;
         }
     })
@@ -187,16 +187,6 @@ angular.module('starter',
             controller:"ManageCtrl",
             data: {
                 'authenticationRequired' : true
-            }
-        })
-
-        .state("manageRepairmans",{
-            url:"/manage_repairmans",
-            templateUrl:'templates/manage/repairmans.html',
-            controller:"ManageCtrl",
-            data: {
-                'authenticationRequired' : true,
-                'usersAuthorized' : ['Gestionnaire', 'Administrateur']
             }
         })
 

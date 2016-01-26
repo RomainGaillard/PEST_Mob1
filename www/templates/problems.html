@@ -21,15 +21,22 @@
                 <td>Commentaire</td>
                 <td>Date</td>
                 <td>Type</td>
-                <td ng-if="myUser.right != 'Gestionnaire'">Supprimer</td>
+                <td ng-if="myUser.right == 'Réparateur'">Intervention</td>
+                <td ng-if="myUser.right != 'Gestionnaire'">Supp</td>
             </tr>
-            <tr ng-repeat="panne in pannes" ng-init="pannes[$index].state == 'Déclarée' ? myClass = 'Déclarée' : myClass='EnCours'" ng-class="myClass">
+            <tr ng-repeat="panne in pannes" ng-init="pannes[$index].state == 'Déclarée' ? myClass = 'Déclarée' : myClass='EnCours'" ng-class="myClass" class="panne{{pannes[$index].id}}">
                 <td><i class="icon ion-alert-circled" style="font-size:30px;padding-left:20px;" ng-class="classPriority" ng-init="classPriority=panne.priority"></i></td>
                 <td>{{panne.truckName}}</td>
                 <td ng-if="myUser.right != 'Transporteur'">{{panne.address}}</td>
                 <td>{{panne.comment}}</td>
                 <td>{{panne.createdAt}}</td>
-                <td>{{panne.typePanne}}</td>
+                <td>{{getTypePanne(panne.typePanne)}}</td>
+                <td ng-if="myUser.right == 'Réparateur'">
+                    <button class="col col-20 button button-icon" ng-click="intervenir(panne)">
+                        <i class="icon ion-log-in balanced" ng-if="panne.state != 'En cours'"></i>
+                        <i class="icon ion-log-out energized" ng-if="panne.state == 'En cours'"></i>
+                    </button>
+                </td>
                 <td ng-if="myUser.right != 'Gestionnaire'">
                     <button class="col col-20 button button-icon bt-cancel-problems" ng-click="cancelProblem(panne)">
                         <i class="icon ion-android-cancel assertive"></i>

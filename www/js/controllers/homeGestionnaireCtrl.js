@@ -18,6 +18,7 @@ angular.module('home.controllers')
         var options = {timeout: 10000, enableHighAccuracy: true};
         var latLng;
         var markers = new Array();
+
         // ========= LES FONCTIONS INTERNES ============================
 
         var determinerIcon = function(i){
@@ -143,7 +144,6 @@ angular.module('home.controllers')
             }
         }
 
-
         var refreshTruck = function(i){
             var jsonPos = JSON.parse($scope.trucks[i].location);
             var pos = new google.maps.LatLng(jsonPos.lat, jsonPos.lng);
@@ -153,6 +153,7 @@ angular.module('home.controllers')
             markers[i].setPosition(pos);
             getAddress(i,pos,name);
         }
+
         // ======== INITIALISATION ===================================
 
         CompanyProvider.getTrucks(getMap);
@@ -182,7 +183,6 @@ angular.module('home.controllers')
         // ========= LES EVENEMENTS ====================================
 
         $rootScope.$on("truckUpdated", function (event,data) {
-            console.log(data);
             for(var i=0;i<$scope.trucks.length;i++){
                 if($scope.trucks[i].id == data.msg.truck.id){
                     $scope.$apply(function () {

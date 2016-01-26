@@ -4,8 +4,8 @@
 
 angular.module('manage.controllers',['ngTable'])
 
-    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','RepairmanProvider','NgTableParams','$ionicHistory','Storage',
-        function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,RepairmanProvider,NgTableParams,$ionicHistory,Storage) {
+    .controller('ManageCtrl', ['$scope', '$state','UserProvider','TruckProvider','PanneProvider','CompanyProvider','TypePanneProvider','NgTableParams','$ionicHistory','Storage',
+        function ($scope, $state,UserProvider,TruckProvider,PanneProvider,CompanyProvider,TypePanneProvider,NgTableParams,$ionicHistory,Storage) {
 
 
         // ======== LES VARIABLES DU SCOPE ==========================
@@ -14,10 +14,14 @@ angular.module('manage.controllers',['ngTable'])
         $scope.newPanne = {};
         $scope.newCompany = {};
         $scope.newTypePanne = {};
-        $scope.newRepairman = {};
         $scope.typesPanne = {};
         $scope.myUser = Storage.getStorage("user").data.user;
-            console.log($scope.myUser);
+        if($scope.myUser.right == "Gestionnaire"){
+            $scope.newUser.company = $scope.myUser.company;
+        }
+
+        $scope.trucks = new Array();
+        $scope.users = new Array();
 
         // ========= LES FONCTIONS INTERNES ============================
 
@@ -26,10 +30,10 @@ angular.module('manage.controllers',['ngTable'])
             $(".chargement").show();
             UserProvider.getAll()
                 .then(function(res){
-                    console.log(res);
                     $(".chargement").slideUp("slow");
                     $(".table-responsive").slideDown("slow");
                     var data = res;
+                    $scope.users = res;
                     $scope.tableParamsUser = new NgTableParams({
                         page: 1,
                         count: 10,
@@ -50,7 +54,7 @@ angular.module('manage.controllers',['ngTable'])
             $(".chargement").show();
             TruckProvider.getAll()
                 .then(function(res){
-                    console.log(res);
+                    $scope.trucks = res;
                     $(".chargement").slideUp("slow");
                     $(".table-responsive").slideDown("slow");
                     var data = res;
@@ -144,37 +148,14 @@ angular.module('manage.controllers',['ngTable'])
                 });
         };
 
-        var getAllRepairmans = function(){
-            $(".table-responsive").hide();
-            $(".chargement").show();
-            RepairmanProvider.getAll()
-                .then(function(res){
-                    console.log(res);
-                    $scope.chargement = false;
-                    $(".chargement").slideUp("slow");
-                    $(".table-responsive").slideDown("slow");
-                    var data = res;
-                    $scope.tableParamsRepairman = new NgTableParams({
-                        page: 1,
-                        count: 10,
-                    },{
-                        total:data.length,
-                        getData: function ($defer, params) {
-                            $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                        }
-                    });
-                })
-                .catch(function(err){
-                    console.log(err);
-                });
-        };
-
         // ======== INITIALISATION ===================================
         switch($ionicHistory.currentStateName()) {
             case "manageUsers":
+                getAllTrucks();
                 getAllUsers();
                 break;
             case "manageTrucks":
+                getAllUsers();
                 getAllTrucks();
                 break;
             case "managePannes":
@@ -186,9 +167,6 @@ angular.module('manage.controllers',['ngTable'])
                 break;
             case "manageTypesPanne":
                 getAllTypesPanne();
-                break;
-            case "manageRepairmans":
-                getAllRepairmans();
                 break;
         }
 
@@ -208,9 +186,6 @@ angular.module('manage.controllers',['ngTable'])
         $scope.goToManageTypesPanne = function () {
             $state.go("manageTypesPanne");
         };
-        $scope.goToManageRepairmans = function () {
-            $state.go("manageRepairmans");
-        };
         $scope.goToManageCompanys = function () {
             $state.go("manageCompanys");
         };
@@ -224,6 +199,11 @@ angular.module('manage.controllers',['ngTable'])
         }
 
         // ========= LES FONCTIONS DU SCOPE ============================
+
+        $scope.changeTruck = function(user){
+            UserProvider.update(user.id,user);
+        };
+
 
         $scope.removeUser = function(id){
             UserProvider.remove(id).then(function(res) {
@@ -318,23 +298,6 @@ angular.module('manage.controllers',['ngTable'])
                 })
         };
 
-        $scope.removeRepairman = function(id){
-            RepairmanProvider.remove(id).then(function(res) {
-                    getAllRepairmans();
-                })
-                .catch(function(err){
-                    console.log(err);
-                });
-        };
-
-        $scope.createRepairman = function(){
-            RepairmanProvider.create($scope.newRepairman).then(function(res){
-                    getAllRepairmans();
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
-        };
 
         // ========= LES POPUPS ========================================
 

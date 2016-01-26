@@ -27,9 +27,13 @@
         <div id="map" data-tap-disabled="true"></div>
     </ion-content>
     <div class="footer">
-        <button class="button button-full button-assertive" ng-click="reportProblem();">
+        <button class="button button-full button-assertive" ng-click="reportProblem();" ng-if="truck != null">
             <i class="icon ion-alert-circled"></i>
             Signaler un problème
+        </button>
+        <button class="button button-full button-assertive" ng-if="truck == null">
+            <i class="icon ion-alert-circled"></i>
+            Vous ne possédez aucun véhicule. Contacter votre gestionnaire.
         </button>
     </div>
 </ion-view>

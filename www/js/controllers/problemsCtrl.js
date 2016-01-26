@@ -1,14 +1,16 @@
 angular.module('problems.controllers',[])
 
-    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider','$rootScope','TruckProvider','CompanyProvider',
-        function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider,$rootScope,TruckProvider,CompanyProvider) {
+    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider','$rootScope','TruckProvider','CompanyProvider','TypePanneProvider',
+        function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider,$rootScope,TruckProvider,CompanyProvider,TypePanneProvider) {
 
         // ======== LES VARIABLES DU SCOPE ===========================
         $scope.myUser = Storage.getStorage("user").data.user;
         $scope.pannes = new Array();
-        var trucks = new Array();
+        $scope.myClass = "Déclarée";
 
         // ======== VARIABLES INTERNES ===============================
+        var trucks = new Array();
+        var typesPanne = new Array();
 
         // ========= LES ROUTES ======================================
 
@@ -29,6 +31,30 @@ angular.module('problems.controllers',[])
                 console.log(error);
             })
         };
+
+        $scope.getTypePanne = function(id){
+            for(var i=0;i<typesPanne.length;i++){
+                if(typesPanne[i].id == id){
+                    return typesPanne[i].name;
+                }
+            }
+        }
+
+        $scope.intervenir = function(panne){
+            if(panne.state == "Déclarée")
+                panne.state = "En cours";
+            else
+                panne.state = "Déclarée";
+            console.log(panne.state);
+            panne.repairman = $scope.myUser.id;
+            PanneProvider.update(panne.id,panne)
+                .then(function(res){
+                    console.log(res);
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+        }
 
         // ========= LES FONCTIONS INTERNES ==========================
 
@@ -60,6 +86,20 @@ angular.module('problems.controllers',[])
                     }
                 });
             }
+            else if($scope.myUser.right == "Réparateur"){
+                TruckProvider.getAll_socket(function(trucks_){
+                    for(var i=0;i<trucks_.length;i++){
+                        if(trucks_[i].length == undefined) {  //  CORRIGER BUG WTF DE LA MORT QUI TUE !
+                            trucks.push(trucks_[i]);
+                            for (var j = 0; j < trucks_[i].pannes.length; j++) {
+                                var p = trucks_[i].pannes[j];
+                                p.truckName = trucks_[i].name;
+                                geocoder(p, trucks_[i].location);
+                            }
+                        }
+                    }
+                })
+            }
         }
 
         var geocoder = function(p,location){
@@ -87,7 +127,19 @@ angular.module('problems.controllers',[])
             $scope.pannes[index].createdAt = "le "+j+" à "+h+"h"+m;
         }
 
+        var getAllTypesPanne = function(){
+                TypePanneProvider.getAll()
+                    .then(function(res){
+                        typesPanne = res;
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+        };
+
+
         // ======== INITIALISATION ===================================
+        getAllTypesPanne();
         getPannes();
 
         // ========= LES POPUPS ======================================
@@ -135,5 +187,19 @@ angular.module('problems.controllers',[])
             }
         });
 
+        $rootScope.$on("panneUpdated", function(event,data){
+            for(var i=0;i<$scope.pannes.length;i++){
+                if($scope.pannes[i].id == data.panne.id){
+                    $scope.$apply(function(){
+                        $scope.pannes[i].state = data.panne.state;
+                        console.log(data.panne.state);
+                        if(data.panne.state == "En cours")
+                            $(".panne"+data.panne.id).switchClass("Déclarée","EnCours",500);
+                        else
+                            $(".panne"+data.panne.id).switchClass("EnCours","Déclarée",500);
+                    })
+                }
+            }
+        })
 
     }]);

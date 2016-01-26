@@ -33,6 +33,12 @@
                     <td data-title="'Rang'">
                         {{user.right}}
                     </td>
+                    <td data-title="'Vehicule'" ng-if="myUser.right == 'Gestionnaire'">
+                        <select ng-model="user.truck" class="form-control" ng-change="changeTruck({{user}})" ng-if="user.truck === undefined ? user.truck = 'null' : user.truck = user.truck">
+                            <option value="null">Aucun</option>
+                            <option ng-repeat="truck in trucks" value="{{truck.id}}">{{truck.name}}</option>
+                        </select>
+                    </td>
                     <td data-title="'Supprimer'">
                         <button class="button button-small button-icon" ng-click="removeUser({{user.id}})">
                             <i class="icon ion-ios-trash assertive"></i>
@@ -61,7 +67,7 @@
                         <label class="item item-input">
                             <input required type="password" placeholder="Confirmer mot de passe" ng-model="newUser.confirmPassword">
                         </label>
-                        <label class="item item-input">
+                        <label class="item item-input" ng-if="myUser.right != 'Gestionnaire'">
                             <input required type="number" placeholder="Compagnie Id" min=1 ng-model="newUser.company">
                         </label>
                         <label class="item item-input">
@@ -70,8 +76,8 @@
                         <label class="item item-input">
                             <label>Rang:  <br></label>
                             <select ng-model="newUser.right" ng-init="newUser.right = 'User'" class="form-control" style="width:15%" >
-                                <option value="Utilisateur">Utilisateur</option>
-                                <option value="Administrateur">Administrateur</option>
+                                <!--<option value="Utilisateur">Utilisateur</option>-->
+                                <option value="Administrateur" ng-if="myUser.right == 'Administrateur'">Administrateur</option>
                                 <option value="Transporteur">Transporteur</option>
                                 <option value="Réparateur">Réparateur</option>
                                 <option value="Gestionnaire">Gestionnaire</option>

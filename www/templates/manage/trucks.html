@@ -49,11 +49,15 @@
                         <label class="item item-input">
                             <input type="text" placeholder="Position" ng-model="newTruck.location">
                         </label>
-                        <label class="item item-input">
+                        <label class="item item-input" ng-if="myUser.right != 'Gestionnaire'">
                             <input required type="number" min=1 placeholder="Compagnie id" ng-model="newTruck.company">
                         </label>
                         <label class="item item-input">
-                            <input type="number" min=1 placeholder="Utilisateur id" ng-model="newTruck.currentUser">
+                            <label>Utilisateur: <br> </label>
+                            <select ng-model="newTruck.currentUser" class="form-control" style="width:25%" ng-init="newTruck.currentUser = 'null'" >
+                                <option value="null">Aucun</option>
+                                <option ng-repeat="user in users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
+                            </select>
                         </label>
                         <label class="item item-input">
                             <label>Etat:  <br></label>

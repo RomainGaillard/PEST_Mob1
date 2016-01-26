@@ -14,7 +14,8 @@ angular.module('provider')
             'update': update,
             'getAll': getAll,
             'getOne': getOne,
-            'updateLocation':updateLocation
+            'updateLocation':updateLocation,
+            'getAll_socket':getAll_socket
         };
 
         function create(truck) {
@@ -33,6 +34,19 @@ angular.module('provider')
             return provider.one('trucks').getList();
         }
 
+        function getAll_socket(callback){
+            io.socket.get("http://localhost:1337/trucks",{token:token},function(trucks,jwres){
+                if(jwres.statusCode == 200){
+                    callback(trucks);
+                }
+                else{
+                    console.log(jwres.statusCode)
+                    console.log('Erreur'+jwres.body.err);
+                    callback(new Array());
+                }
+            })
+        }
+
         function getOne(idTruck,callback){
             //return provider.one('truck', idTruck).get();
             io.socket.get("http://localhost:1337/truck/"+idTruck,{token:token},function(truck,jwres){
@@ -43,6 +57,7 @@ angular.module('provider')
                 else{
                     console.log(jwres.statusCode)
                     console.log('Erreur'+jwres.body.err);
+                    callback(null);
                 }
             })
 

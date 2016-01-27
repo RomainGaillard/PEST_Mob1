@@ -1,7 +1,7 @@
 angular.module('problems.controllers',[])
 
-    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider','$rootScope','TruckProvider','CompanyProvider','TypePanneProvider',
-        function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider,$rootScope,TruckProvider,CompanyProvider,TypePanneProvider) {
+    .controller('ProblemsCtrl', ['$scope', '$state','$ionicPopup','$ionicHistory', 'Storage', 'PanneProvider','$rootScope','TruckProvider','CompanyProvider','TypePanneProvider','UserProvider',
+        function ($scope, $state,$ionicPopup,$ionicHistory, Storage, PanneProvider,$rootScope,TruckProvider,CompanyProvider,TypePanneProvider,UserProvider) {
 
         // ======== LES VARIABLES DU SCOPE ===========================
         $scope.myUser = Storage.getStorage("user").data.user;
@@ -40,20 +40,42 @@ angular.module('problems.controllers',[])
             }
         }
 
-        $scope.intervenir = function(panne){
-            if(panne.state == "Déclarée")
-                panne.state = "En cours";
-            else
-                panne.state = "Déclarée";
-            console.log(panne.state);
-            panne.repairman = $scope.myUser.id;
-            PanneProvider.update(panne.id,panne)
+        $scope.intervenir = function(index){
+            var test = {};
+            test.id = $scope.pannes[index].id;
+
+
+            if($scope.pannes[index].state == "Déclarée"){
+                $scope.pannes[index].state = "En cours";
+                test.idRepairman = $scope.myUser.id;
+            }
+            else {
+                $scope.pannes[index].state = "Déclarée";
+                test.idRepairman = null;
+            }
+
+
+            test.state = $scope.pannes[index].state;
+
+
+            PanneProvider.update(test.id,test)
                 .then(function(res){
                     console.log(res);
                 })
                 .catch(function(err){
                     console.log(err);
                 })
+        }
+
+        $scope.getUser = function(id){
+            console.log(id);
+            /*UserProvider.getOne(id).then(function(res){
+                var nom = res.firstname + " "+ res.lastname;
+                return nom;
+            })
+            .catch(function(err){
+                console.log(err);
+            })*/
         }
 
         // ========= LES FONCTIONS INTERNES ==========================

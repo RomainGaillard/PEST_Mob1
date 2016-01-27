@@ -18,10 +18,14 @@ angular.module('manage.controllers',['ngTable'])
         $scope.myUser = Storage.getStorage("user").data.user;
         if($scope.myUser.right == "Gestionnaire"){
             $scope.newUser.company = $scope.myUser.company;
+            $scope.newTruck.company = $scope.myUser.company;
         }
+
+        console.log($scope.myUser.right);
 
         $scope.trucks = new Array();
         $scope.users = new Array();
+        $scope.myCompany = {};
 
         // ========= LES FONCTIONS INTERNES ============================
 
@@ -33,7 +37,15 @@ angular.module('manage.controllers',['ngTable'])
                     $(".chargement").slideUp("slow");
                     $(".table-responsive").slideDown("slow");
                     var data = res;
-                    $scope.users = res;
+                    for(var i=0;i<res.length;i++){
+                        var user = res[i];
+                        if(res[i].truck)
+                            user.truck = res[i].truck.id;
+                        else user.truck = 'null';
+                        console.log(user);
+                        $scope.users.push(user);
+                    }
+
                     $scope.tableParamsUser = new NgTableParams({
                         page: 1,
                         count: 10,
@@ -148,6 +160,14 @@ angular.module('manage.controllers',['ngTable'])
                 });
         };
 
+        var getMyCompany = function(){
+            CompanyProvider.getOne($scope.myUser.company).then(function(res){
+                $scope.myCompany = res;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+        }
         // ======== INITIALISATION ===================================
         switch($ionicHistory.currentStateName()) {
             case "manageUsers":
@@ -167,6 +187,9 @@ angular.module('manage.controllers',['ngTable'])
                 break;
             case "manageTypesPanne":
                 getAllTypesPanne();
+                break;
+            case "manageMyCompany":
+                getMyCompany();
                 break;
         }
 
@@ -190,6 +213,9 @@ angular.module('manage.controllers',['ngTable'])
             $state.go("manageCompanys");
         };
 
+        $scope.goToManageMyCompany = function(){
+            $state.go("manageMyCompany");
+        }
         $scope.goToBack = function(){
             $state.go("manageMenu");
         };
@@ -201,9 +227,19 @@ angular.module('manage.controllers',['ngTable'])
         // ========= LES FONCTIONS DU SCOPE ============================
 
         $scope.changeTruck = function(user){
+            console.log(user.truck);
             UserProvider.update(user.id,user);
         };
 
+        $scope.updateCompany = function(){
+            CompanyProvider.update($scope.myCompany.id,$scope.myCompany)
+                .then(function(res){
+                    console.log(res);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
 
         $scope.removeUser = function(id){
             UserProvider.remove(id).then(function(res) {
@@ -216,6 +252,7 @@ angular.module('manage.controllers',['ngTable'])
 
         $scope.createUser = function(){
             UserProvider.create($scope.newUser).then(function(res){
+                    getAllTrucks();
                     getAllUsers();
                 })
                 .catch(function(err){
@@ -233,7 +270,7 @@ angular.module('manage.controllers',['ngTable'])
         };
 
         $scope.createTruck = function(){
-            console.log($scope.newTruck.running)
+            console.log($scope.newTruck)
             TruckProvider.create($scope.newTruck).then(function(res){
                     getAllTrucks()
                 })
@@ -253,12 +290,9 @@ angular.module('manage.controllers',['ngTable'])
 
         $scope.createPanne = function(){
             console.log($scope.newPanne.typePanne)
-            PanneProvider.create($scope.newPanne).then(function(res){
+            PanneProvider.create($scope.newPanne,function(res){
                     getAllPannes();
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
+            })
         };
 
         $scope.removeCompany = function(id){

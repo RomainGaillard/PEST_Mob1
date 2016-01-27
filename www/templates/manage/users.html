@@ -34,7 +34,7 @@
                         {{user.right}}
                     </td>
                     <td data-title="'Vehicule'" ng-if="myUser.right == 'Gestionnaire'">
-                        <select ng-model="user.truck" class="form-control" ng-change="changeTruck({{user}})" ng-if="user.truck === undefined ? user.truck = 'null' : user.truck = user.truck">
+                        <select class="form-control" id="vehicule" ng-model="user.truck" ng-change="changeTruck({{user}})">
                             <option value="null">Aucun</option>
                             <option ng-repeat="truck in trucks" value="{{truck.id}}">{{truck.name}}</option>
                         </select>

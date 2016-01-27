@@ -22,6 +22,10 @@
 
     // ======== LES FONCTIONS INTERNES ==========================
     function goToHome(){
+        if(!Storage.getStorage("user")){
+            $state.go("app");
+            return
+        }
         switch (Storage.getStorage("user").data.user.right) {
             case "Réparateur":
                 $state.go("homeRepairman", {}, {reload: true});
@@ -60,7 +64,7 @@
     $scope.myUser = {};
 
     if ($auth.isAuthenticated() && $ionicHistory.currentStateName() == "app" ){
-      $state.go('home');
+        goToHome();
     }
     $scope.onLoginClick = function () {
 
@@ -71,7 +75,9 @@
       $auth.login({email: angular.lowercase($scope.myUser.identifier), password:  $scope.myUser.password})
         .then(function (response) {
           $rootScope.authenticationRequired = true;
-          Storage.setStorage('user', response);
+            Storage.clearStorage();
+            Storage.setStorage('user', response);
+            Storage.setStorage('token',response.data.token);
           goToHome();
         })
         .catch(function (error) {

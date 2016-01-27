@@ -14,7 +14,7 @@
             var latLng;
             var marker;
             var inactif = false;
-            var freqEnvoi = 105000;
+            var freqEnvoi = 15000;
             var freqInactif = 12;
 
             // ========= LES FONCTIONS INTERNES ============================
@@ -25,7 +25,17 @@
                     icon =  "truck";
 
                 switch($scope.truck.state){
-                    case "En Panne":icon = icon+"-red";
+                    case "En Panne":
+                        console.log($scope.truck.pannes)
+                        var allPannesIntervention = true;
+                        for(var j=0;j<$scope.truck.pannes.length;j++){
+                            if($scope.truck.pannes[j].idRepairman == null)
+                                allPannesIntervention = false;
+                        }
+                        if(allPannesIntervention)
+                            icon = icon+"-blue";
+                        else
+                            icon = icon+"-red";
                         break;
                     default: icon = icon+"-green";
                         break;
@@ -139,8 +149,10 @@
             };
 
             var getMyTruck = function(){
+                console.log("getMyTruck");
                 TruckProvider.getOne($scope.myUser.truck, function(res){
                     $scope.$apply(function(){
+                        console.log(res);
                         $scope.truck = res;
                         $scope.truck.pannes = res.pannes;
                     });
@@ -156,6 +168,15 @@
                     buttons: [{ text: txtBt }]
                 });
             }
+
+            var refreshTruck = function(){
+                var jsonPos = JSON.parse($scope.truck.location);
+                var pos = new google.maps.LatLng(jsonPos.lat, jsonPos.lng);
+
+                marker.setIcon("img/"+determinerIcon()+".svg")
+                marker.setPosition(pos);
+            }
+
 
             // ======== INITIALISATION ===================================
             getMyTruck();
@@ -225,7 +246,27 @@
 
             $rootScope.$on("panneUpdated", function (event,data) {
                 console.log(data);
+                for(var i=0;i<$scope.truck.pannes.length;i++){
+                    if($scope.truck.pannes[i].id == data.panne.id){
+                        $scope.$apply(function(){
+                            $scope.truck.pannes[i] = data.panne;
+                            refreshTruck();
+                        })
+                    }
+                }
+                // Editer nombre de panne + icon !
             });
+
+            $rootScope.$on("truckUpdated",function(event,data){
+                console.log(data);
+                $scope.$apply(function(){
+                    var pannes = $scope.truck.pannes;
+                    $scope.truck = data.msg.truck;
+                    $scope.truck.pannes = pannes;
+                    refreshTruck();
+                })
+                // Editer si perte du truck / currentUser !
+            })
 
             $rootScope.$on("$stateChangeSuccess",function(event,next){
                 if($auth.isAuthenticated() && Storage.getStorage("user").data.user.right == "Transporteur"){

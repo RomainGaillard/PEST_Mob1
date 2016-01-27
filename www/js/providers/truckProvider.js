@@ -7,7 +7,7 @@ angular.module('provider')
 
     .factory('TruckProvider',['SETTINGS','Restangular','Storage', function TruckProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
-        var token = ""+Storage.getStorage("user").data.token;
+        var token = ""+Storage.getStorage("token");
         return {
             'create': create,
             'remove': remove,

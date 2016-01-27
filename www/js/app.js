@@ -72,7 +72,6 @@ angular.module('starter',
                 $rootScope.$emit("truckDestroyed",{id:msg.id});
                 break;
             case "updated":
-                console.log("truck updated");
                 $rootScope.$emit("truckUpdated",{msg:msg.data})
                 break;
         }
@@ -117,7 +116,7 @@ angular.module('starter',
             cache:false,
             data: {
                 'authenticationRequired' : true,
-                'usersAuthorized' : ['transporteur']
+                'usersAuthorized' : ['Transporteur']
             }
         })
 
@@ -135,6 +134,7 @@ angular.module('starter',
             url: '/manage_menu',
             templateUrl: 'templates/manage_menu.html',
             controller: "ManageCtrl",
+            cache: false,
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire', 'Administrateur']
@@ -145,6 +145,7 @@ angular.module('starter',
             url:"/manage_users",
             templateUrl:'templates/manage/users.html',
             controller:"ManageCtrl",
+            cache: false,
             data: {
               'authenticationRequired' : true,
               'usersAuthorized' : ['Gestionnaire', 'Administrateur']
@@ -155,6 +156,7 @@ angular.module('starter',
             url:"/manage_trucks",
             templateUrl:'templates/manage/trucks.html',
             controller:"ManageCtrl",
+            cache: false,
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire', 'Administrateur']
@@ -165,6 +167,7 @@ angular.module('starter',
             url:"/manage_companys",
             templateUrl:'templates/manage/companys.html',
             controller:"ManageCtrl",
+            cache: false,
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire', 'Administrateur']
@@ -175,6 +178,7 @@ angular.module('starter',
             url:"/manage_pannes",
             templateUrl:'templates/manage/pannes.html',
             controller:"ManageCtrl",
+            cache: false,
             data: {
                 'authenticationRequired' : true,
                 'usersAuthorized' : ['Gestionnaire', 'Administrateur']
@@ -185,8 +189,10 @@ angular.module('starter',
             url:"/manage_typesPanne",
             templateUrl:'templates/manage/type_panne.html',
             controller:"ManageCtrl",
+            cache: false,
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Administrateur']
             }
         })
 
@@ -207,7 +213,8 @@ angular.module('starter',
             controller:"HomeRepairmanCtrl",
             cache:false,
             data: {
-                'authenticationRequired' : true
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Réparateur']
             }
         })
 
@@ -218,6 +225,16 @@ angular.module('starter',
             cache:false,
             data: {
                 'authenticationRequired' : true
+            }
+        })
+
+        .state("manageMyCompany",{
+            url:"/manage_company",
+            templateUrl:"templates/manage/company.html",
+            controller:"ManageCtrl",
+            data: {
+                'authenticationRequired' : true,
+                'usersAuthorized' : ['Gestionnaire']
             }
         });
 

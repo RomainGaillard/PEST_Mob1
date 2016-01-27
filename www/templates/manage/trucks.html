@@ -55,7 +55,7 @@
                         <label class="item item-input">
                             <label>Utilisateur: <br> </label>
                             <select ng-model="newTruck.currentUser" class="form-control" style="width:25%" ng-init="newTruck.currentUser = 'null'" >
-                                <option value="null">Aucun</option>
+                                <option value='null'>Aucun</option>
                                 <option ng-repeat="user in users" value="{{user.id}}">{{user.firstname}} {{user.lastname}}</option>
                             </select>
                         </label>

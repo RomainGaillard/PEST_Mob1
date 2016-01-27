@@ -20,6 +20,7 @@ angular.module('home.controllers')
         var marker;
         var markers = new Array();
         var freqEnvoi = 105000;
+        var destination = "";
 
         // ========= LES FONCTIONS INTERNES ============================
 
@@ -29,7 +30,16 @@ angular.module('home.controllers')
                 icon =  "truck";
 
             switch($scope.trucks[i].state){
-                case "En Panne":icon = icon+"-red";
+                case "En Panne":
+                    var allPannesIntervention = true;
+                    for(var j=0;j<$scope.trucks[i].pannes.length;j++){
+                        if($scope.trucks[i].pannes[j].idRepairman == null)
+                            allPannesIntervention = false;
+                    }
+                    if(allPannesIntervention)
+                        icon = icon+"-blue";
+                    else
+                        icon = icon+"-red";
                     break;
                 default: icon = icon+"-green";
                     break;
@@ -40,7 +50,6 @@ angular.module('home.controllers')
         var getAddress = function(i,pos,name){
             var geocoder = new google.maps.Geocoder();
             var nbPannes = "";
-            console.log($scope.trucks[i].pannes);
             if($scope.trucks[i].pannes)
                 nbPannes = "<strong>"+$scope.trucks[i].pannes.length+" pannes en cours ! </strong><br>";
             geocoder.geocode({latLng: pos}, function(responses) {
@@ -53,6 +62,24 @@ angular.module('home.controllers')
                     console.log('Error: Google Maps could not determine the address of this location.');
                 }
             })
+        }
+
+        var getMyAddressLocation = function(){
+            $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+                var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({latLng: latLng}, function(responses) {
+                    if (responses && responses.length > 0) {
+                        calculate(responses[0].formatted_address,destination);
+                    } else {
+                        console.log('Error: Google Maps could not determine the address of this location.');
+                        getMyAddressLocation();
+                    }
+                })
+            }, function(error){
+                console.log("Could not get location");
+                getMyAddressLocation();
+            });
         }
 
         var getMap = function(trucks){
@@ -68,8 +95,14 @@ angular.module('home.controllers')
                     zoom: 6,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
-                $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+                $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                panel = document.getElementById("panel");
+
+                direction = new google.maps.DirectionsRenderer({
+                    map   : $scope.map,
+                    panel : panel
+                });
                 //Wait until the map is loaded
 
                 /* Faire une boucle sur  le nombre de vehicules */
@@ -161,6 +194,7 @@ angular.module('home.controllers')
                     }
                 }
             }
+            console.log($scope.pannes);
         }
 
         var refreshTruck = function(i){
@@ -192,6 +226,22 @@ angular.module('home.controllers')
             });
         }
 
+        var calculate = function(origin, destination){
+            if(origin && destination){
+                var request = {
+                    origin      : origin,
+                    destination : destination,
+                    travelMode  : google.maps.DirectionsTravelMode.DRIVING // Type de transport
+                }
+                var directionsService = new google.maps.DirectionsService(); // Service de calcul d'itinéraire
+                directionsService.route(request, function(response, status){ // Envoie de la requête pour calculer le parcours
+                    if(status == google.maps.DirectionsStatus.OK){
+                        direction.setDirections(response); // Trace l'itinéraire sur la carte et les différentes étapes du parcours
+                    }
+                });
+            }
+        };
+
         // ======== INITIALISATION ===================================
         TruckProvider.getAll_socket(getMap);
 
@@ -205,6 +255,12 @@ angular.module('home.controllers')
         };
 
         // ========= LES FONCTIONS DU SCOPE ============================
+
+        $scope.traceIntineraire = function(dest){
+            $state.go("homeRepairman");
+            destination = dest;
+            getMyAddressLocation();
+        }
 
 
         // ========= LES POPUPS ========================================
@@ -223,8 +279,8 @@ angular.module('home.controllers')
                         $scope.trucks[i].running = data.msg.truck.running;
                         $scope.trucks[i].state = data.msg.truck.state;
                         if(data.msg.panne) {
-                            $scope.pannes.push(data.msg.panne);
                             $scope.trucks[i].pannes.push(data.msg.panne);
+                            CompanyProvider.getTrucks(getPannes);
                         }
                         refreshTruck(i);
                     });
@@ -243,7 +299,35 @@ angular.module('home.controllers')
                     }
                 }
             }
+            for(var k=0;k<$scope.pannes.length;k++){
+                if($scope.pannes[k].id == data.id){
+                    $scope.$apply(function(){
+                        $scope.pannes.splice(k,1)
+                    })
+                }
+            }
         });
+
+        $rootScope.$on("panneUpdated",function(event,data){
+            console.log(data);
+            for(var i=0;i<$scope.trucks.length;i++){
+                for(var j=0;j<$scope.trucks[i].pannes.length;j++){
+                    if($scope.trucks[i].pannes[j].id == data.panne.id){
+                        $scope.$apply(function () {
+                            $scope.trucks[i].pannes[j] = data.panne;
+                            refreshTruck(i);
+                        });
+                    }
+                }
+            }
+            for(var k=0;k<$scope.pannes.length;k++){
+                if($scope.pannes[k].id == data.panne.id){
+                    $scope.$apply(function(){
+                        $scope.pannes[k] = data.panne;
+                    })
+                }
+            }
+        })
 
         if($auth.isAuthenticated()&& Storage.getStorage("user").data.user.right == "Réparateur"){
             console.log("startInterval");

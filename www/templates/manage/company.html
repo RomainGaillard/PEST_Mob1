@@ -1,0 +1,45 @@
+<ion-view>
+    <ion-header-bar align-title="center" class="bar">
+        <div class="buttons">
+            <a ng-click="goToBack()" class="button icon-left ion-chevron-left button-clear button-dark">Retour</a>
+        </div>
+        <h1 class="title">Gestion: Compagnie</h1>
+        <div class="buttons">
+            <a class="button icon-right ion-power  button-clear button-dark" ng-controller="LoginCtrl" ng-click="onLogOutClick()"> </a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="container">
+            <div class="jumbotron">
+                <h3>Ma compagnie:</h3>
+                <form ng-submit="updateCompany()">
+                    <div class="list">
+                        <label class="item item-input">
+                            <input type="text" placeholder="Nom" ng-model="myCompany.name" required>
+                        </label>
+                        <label class="item item-input">
+                            <input type="text" placeholder="Adresse" ng-model="myCompany.address">
+                        </label>
+                        <label class="item item-input">
+                            <input type="text" placeholder="N° téléphone" ng-model="myCompany.numberPhone">
+                        </label>
+                        <label class="item item-input">
+                            <label>Type:  <br></label>
+                            <select ng-model="myCompany.type" class="form-control" style="width:15%" required>
+                                <option value="transporteur">transporteur</option>
+                                <option value="depanneur">depanneur</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button id="" class="button button-full button-balanced" type="submit">
+                        <div id="successCo">
+                            <i class="ion-android-arrow-dropright-circle"></i>
+                            <span>   Sauvegarder</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+

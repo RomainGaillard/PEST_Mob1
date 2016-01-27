@@ -4,7 +4,8 @@
 
 angular.module("account.controllers",['LocalStorageModule'])
 
-    .controller('AccountCtrl', ['$scope','$state','$ionicModal','$rootScope','$ionicHistory','Storage', function($scope, $state, $ionicModal,$rootScope,$ionicHistory,Storage) {
+    .controller('AccountCtrl', ['$scope','$state','$ionicModal','$rootScope','$ionicHistory','Storage','UserProvider',
+        function($scope, $state, $ionicModal,$rootScope,$ionicHistory,Storage,UserProvider) {
 
         $("[id='msgError']").hide();
         $scope.myNewUser = Storage.getStorage("user").data.user;
@@ -23,6 +24,8 @@ angular.module("account.controllers",['LocalStorageModule'])
             if($("[ng-model='myNewUser.lastname']").val() == "")
                 noEmpty = false;
             if($("[ng-model='myNewUser.email']").val() == "")
+                noEmpty = false;
+            if($("[ng-model='myNewUser.phoneNumber']").val() == "")
                 noEmpty = false;
             if(!noEmpty)
                 showError("Remplissez les champs");
@@ -64,14 +67,17 @@ angular.module("account.controllers",['LocalStorageModule'])
 
         $scope.updateUser = function() {
             if(verifCase()){
-
-                /*$scope.myNewUser.$update().then(function (data) {
-                    AuthSrv.updateUser(data);
-                    $state.go("locks")
-                }, function (err) {
+                UserProvider.update($scope.myNewUser.id,$scope.myNewUser).then(function(resultat) {
+                    var res = {};
+                    res.data = {};
+                    res.data.user = resultat.user[0];
+                    Storage.setStorage("user",res);
+                    $scope.goToHome();
+                })
+                .catch(function(err){
                     errorCase("myNewUser.email");
                     showError("Ce mail existe déjà ou est incorrect !");
-                })*/s
+                });
             }
         };
 

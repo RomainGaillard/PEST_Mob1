@@ -27,15 +27,21 @@
             <tr ng-repeat="panne in pannes" ng-init="pannes[$index].state == 'Déclarée' ? myClass = 'Déclarée' : myClass='EnCours'" ng-class="myClass" class="panne{{pannes[$index].id}}">
                 <td><i class="icon ion-alert-circled" style="font-size:30px;padding-left:20px;" ng-class="classPriority" ng-init="classPriority=panne.priority"></i></td>
                 <td>{{panne.truckName}}</td>
-                <td ng-if="myUser.right != 'Transporteur'">{{panne.address}}</td>
+                <td ng-if="myUser.right != 'Transporteur'">
+                    {{panne.address}}
+                    <button ng-if="myUser.right == 'Réparateur'" ng-controller="HomeRepairmanCtrl" class="button button-icon bt-cancel-problems" ng-click="traceIntineraire(panne.address)">
+                        <i class="icon ion-pin calm"></i>
+                    </button>
+                </td>
                 <td>{{panne.comment}}</td>
                 <td>{{panne.createdAt}}</td>
                 <td>{{getTypePanne(panne.typePanne)}}</td>
                 <td ng-if="myUser.right == 'Réparateur'">
-                    <button class="col col-20 button button-icon" ng-click="intervenir(panne)">
+                    <button class="col col-20 button button-icon" ng-click="intervenir({{$index}})" ng-if="panne.idRepairman == null || panne.idRepairman == myUser.id">
                         <i class="icon ion-log-in balanced" ng-if="panne.state != 'En cours'"></i>
                         <i class="icon ion-log-out energized" ng-if="panne.state == 'En cours'"></i>
                     </button>
+                    <div ng-if="panne.idRepairman != null && panne.idRepairman != myUser.id ">ID: {{panne.idRepairman}}</div>
                 </td>
                 <td ng-if="myUser.right != 'Gestionnaire'">
                     <button class="col col-20 button button-icon bt-cancel-problems" ng-click="cancelProblem(panne)">

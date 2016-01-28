@@ -48,12 +48,17 @@ angular.module('home.controllers')
         var getAddress = function(i,pos,name){
             var geocoder = new google.maps.Geocoder();
             var nbPannes = "";
+            var utilisateur = "personne";
+
             if($scope.trucks[i].pannes && $scope.trucks[i].pannes.length > 0)
                 nbPannes = "<strong>"+$scope.trucks[i].pannes.length+" pannes en cours ! </strong><br>";
+                utilisateur = $scope.trucks[i].currentUser;
+                if(!utilisateur)
+                    utilisateur = "personne";
             geocoder.geocode({latLng: pos}, function(responses) {
                 if (responses && responses.length > 0) {
                     var content = "<h5>"+name+"</h5>"+
-                            "<div>"+nbPannes+
+                            "<div>User actuel: "+utilisateur+"<br>"+nbPannes+
                         "" + responses[0].formatted_address +"</div>";
                     markers[i].infobulle.setContent(content);
                 } else {

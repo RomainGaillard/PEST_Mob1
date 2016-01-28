@@ -66,7 +66,9 @@ angular.module("account.controllers",['LocalStorageModule'])
         // ========= LES ACTIONS DU SCOPE =====================================
 
         $scope.updateUser = function() {
+            console.log("updateUser traitement");
             if(verifCase()){
+                console.log("updateUser envoi");
                 UserProvider.update($scope.myNewUser.id,$scope.myNewUser).then(function(resultat) {
                     var res = {};
                     res.data = {};

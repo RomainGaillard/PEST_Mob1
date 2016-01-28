@@ -1,7 +1,7 @@
 ﻿angular.module('home.controllers')
 
-    .controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup', 'TypePanneProvider', 'TruckProvider', 'PanneProvider', 'Storage','$rootScope','$auth',
-        function ($scope, $state,$cordovaGeolocation,$ionicPopup, TypePanneProvider, TruckProvider,PanneProvider, Storage,$rootScope,$auth) {
+    .controller('HomeCtrl', ['$scope', '$state','$cordovaGeolocation','$ionicPopup', 'TypePanneProvider', 'TruckProvider', 'PanneProvider', 'Storage','$rootScope','$auth','$ionicHistory',
+        function ($scope, $state,$cordovaGeolocation,$ionicPopup, TypePanneProvider, TruckProvider,PanneProvider, Storage,$rootScope,$auth,$ionicHistory) {
 
             // ======== LES VARIABLES DU SCOPE ==========================
             $scope.myUser = Storage.getStorage("user").data.user;
@@ -14,7 +14,7 @@
             var latLng;
             var marker;
             var inactif = false;
-            var freqEnvoi = 15000;
+            var freqEnvoi = 5000;
             var freqInactif = 12;
 
             // ========= LES FONCTIONS INTERNES ============================
@@ -32,7 +32,7 @@
                             if($scope.truck.pannes[j].idRepairman == null)
                                 allPannesIntervention = false;
                         }
-                        if(allPannesIntervention)
+                        if(allPannesIntervention && $scope.truck.pannes.length > 0)
                             icon = icon+"-blue";
                         else
                             icon = icon+"-red";
@@ -49,26 +49,28 @@
                     $scope.truck.running = false;
                     $scope.updateRunning();
                     //popUp("Attention","Vous êtes inactif ?","Non")
-                    var myPopup = $ionicPopup.show({
-                        template: "Etes-vous entrain de rouler ?",
-                        title: "Avertissement",
-                        cssClass:"popupReportProblem",
-                        subTitle: 'Vous ne bougez-plus...',
-                        scope: $scope,
-                        controller: 'HomeCtrl',
-                        buttons: [
-                            { text: 'Non' },
-                            {
-                                text: '<b>Oui</b>',
-                                type: 'button-assertive',
-                                onTap: function(e) {
-                                    inactif = false;
-                                    $scope.truck.running = true;
-                                    $scope.updateRunning();
+                    if($ionicHistory.currentStateName() == "home"){
+                        var myPopup = $ionicPopup.show({
+                            template: "Etes-vous entrain de rouler ?",
+                            title: "Avertissement",
+                            cssClass:"popupReportProblem",
+                            subTitle: 'Vous ne bougez-plus...',
+                            scope: $scope,
+                            controller: 'HomeCtrl',
+                            buttons: [
+                                { text: 'Non' },
+                                {
+                                    text: '<b>Oui</b>',
+                                    type: 'button-assertive',
+                                    onTap: function(e) {
+                                        inactif = false;
+                                        $scope.truck.running = true;
+                                        $scope.updateRunning();
+                                    }
                                 }
-                            }
-                        ]
-                    });
+                            ]
+                        });
+                    }
                 }
             }
 

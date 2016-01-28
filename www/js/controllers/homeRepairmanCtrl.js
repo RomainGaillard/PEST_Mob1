@@ -36,7 +36,7 @@ angular.module('home.controllers')
                         if($scope.trucks[i].pannes[j].idRepairman == null)
                             allPannesIntervention = false;
                     }
-                    if(allPannesIntervention)
+                    if(allPannesIntervention  && $scope.trucks[i].pannes.length > 0)
                         icon = icon+"-blue";
                     else
                         icon = icon+"-red";
@@ -83,8 +83,8 @@ angular.module('home.controllers')
         }
 
         var getMap = function(trucks){
+            getPannes(trucks);
             $scope.$apply(function () {
-                getPannes(trucks);
                 $scope.trucks = trucks;
             });
 
@@ -187,14 +187,16 @@ angular.module('home.controllers')
         }
 
         var getPannes = function(trucks){
-            for(var i=0;i<trucks.length;i++){
-                for(var j=0;j<trucks[i].pannes.length;j++){
-                    if(trucks[i].pannes[j]){
-                        $scope.pannes.push(trucks[i].pannes[j]);
+            $scope.$apply(function() {
+                $scope.pannes = new Array();
+                for (var i = 0; i < trucks.length; i++) {
+                    for (var j = 0; j < trucks[i].pannes.length; j++) {
+                        if (trucks[i].pannes[j]) {
+                            $scope.pannes.push(trucks[i].pannes[j]);
+                        }
                     }
                 }
-            }
-            console.log($scope.pannes);
+            })
         }
 
         var refreshTruck = function(i){

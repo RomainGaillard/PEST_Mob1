@@ -34,7 +34,7 @@
                 $state.go("manageMenu");
                 break;
             case "Gestionnaire":
-                $state.go("homeGestionnaire");
+                $state.go("homeGestionnaire", {cache:false}, {reload: true});
                 break;
             default:
                 $state.go("home", {}, {reload: true});
@@ -99,7 +99,8 @@
       $auth.logout()
           .then(function(){
             Storage.clearStorage();
-            $state.go('app');
+            $ionicHistory.clearCache();
+            $state.go('app',{},{reload:true});
           })
           .catch(function(response){
             popUp('Deconnexion Impossible', 'Un problème est survenu lors de la déconnexion')

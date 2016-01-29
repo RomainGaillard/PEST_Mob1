@@ -19,7 +19,7 @@ angular.module('home.controllers')
         var latLng;
         var marker;
         var markers = new Array();
-        var freqEnvoi = 105000;
+        var freqEnvoi = 10000;
         var destination = "";
 
         // ========= LES FONCTIONS INTERNES ============================

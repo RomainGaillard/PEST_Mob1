@@ -7,7 +7,6 @@ angular.module('provider')
 
     .factory('PanneProvider',['SETTINGS','Restangular','Storage', function PanneProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
-        var token = ""+Storage.getStorage("token");
 
         return {
             'create': create,
@@ -20,7 +19,7 @@ angular.module('provider')
 
         function create(panne,AddPanne) {
             //return provider.one('panne').customPOST(panne);
-            io.socket.post("http://localhost:1337/panne/",{token:token,priority:panne.priority,comment:panne.comment,truck:panne.truck,typePanne:panne.typePanne},function(panne,jwres){
+            io.socket.post("http://localhost:1337/panne/",{token:getToken(),priority:panne.priority,comment:panne.comment,truck:panne.truck,typePanne:panne.typePanne},function(panne,jwres){
                 if(jwres.statusCode == 201){
                     AddPanne(panne);
                 }
@@ -49,6 +48,10 @@ angular.module('provider')
 
         function getOneByTruck(idTruck){
             return provider.one('truck', idTruck).one('pannes').customGET();
+        }
+
+        function getToken(){
+            return ""+Storage.getStorage("token");
         }
     }]);
 //})();

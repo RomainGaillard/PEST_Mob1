@@ -15,7 +15,7 @@
             var marker;
             var inactif = false;
             var freqEnvoi = 5000;
-            var freqInactif = 12;
+            var freqInactif = 6;
 
             // ========= LES FONCTIONS INTERNES ============================
 

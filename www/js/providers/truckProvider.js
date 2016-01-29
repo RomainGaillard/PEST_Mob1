@@ -7,7 +7,6 @@ angular.module('provider')
 
     .factory('TruckProvider',['SETTINGS','Restangular','Storage', function TruckProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
-        var token = ""+Storage.getStorage("token");
         return {
             'create': create,
             'remove': remove,
@@ -35,7 +34,7 @@ angular.module('provider')
         }
 
         function getAll_socket(callback){
-            io.socket.get("http://localhost:1337/trucks",{token:token},function(trucks,jwres){
+            io.socket.get("http://localhost:1337/trucks",{token:getToken()},function(trucks,jwres){
                 if(jwres.statusCode == 200){
                     callback(trucks);
                 }
@@ -49,7 +48,7 @@ angular.module('provider')
 
         function getOne(idTruck,callback){
             //return provider.one('truck', idTruck).get();
-            io.socket.get("http://localhost:1337/truck/"+idTruck,{token:token},function(truck,jwres){
+            io.socket.get("http://localhost:1337/truck/"+idTruck,{token:getToken()},function(truck,jwres){
                 if(jwres.statusCode == 200){
                     //console.log(truck);
                     callback(truck);
@@ -66,7 +65,7 @@ angular.module('provider')
         function updateLocation(latLng){
             var idTruck = Storage.getStorage("user").data.user.truck;
             var loc = JSON.stringify(latLng);
-            io.socket.put("http://localhost:1337/truck/"+idTruck,{token:token,location:loc},function(truck,jwres){
+            io.socket.put("http://localhost:1337/truck/"+idTruck,{token:getToken(),location:loc},function(truck,jwres){
                 if(jwres.statusCode == 200){
                     console.log(truck);
                 }
@@ -75,6 +74,10 @@ angular.module('provider')
                     console.log('Erreur'+jwres.body.err);
                 }
             })
+        }
+
+        function getToken(){
+            return ""+Storage.getStorage("token");
         }
     }]);
 //})();

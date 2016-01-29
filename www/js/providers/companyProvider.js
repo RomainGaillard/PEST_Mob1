@@ -7,7 +7,6 @@ angular.module('provider')
 
     .factory('CompanyProvider',['SETTINGS','Restangular','Storage', function CompanyProvider(SETTINGS,Restangular,Storage) {
         var provider = Restangular.setBaseUrl(SETTINGS.BASE_API_URL);
-        var token = ""+Storage.getStorage("token");
 
         return {
             'create': create,
@@ -39,7 +38,7 @@ angular.module('provider')
         }
 
         function getTrucks(callback){
-            io.socket.get("http://localhost:1337/company/trucks",{token:token},function(res,jwres){
+            io.socket.get("http://localhost:1337/company/trucks",{token:getToken()},function(res,jwres){
                 if(jwres.statusCode == 200){
                     callback(res.trucks);
                 }
@@ -49,6 +48,10 @@ angular.module('provider')
                     callback(new Array());
                 }
             })
+        }
+
+        function getToken(){
+            return ""+Storage.getStorage("token");
         }
     }]);
 //})();
